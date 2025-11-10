@@ -14,12 +14,33 @@ export default function Signup() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
     console.log("Signup attempt:", { fullName, email, password });
-    // TODO: Implement actual authentication
-    setLocation("/onboarding");
+
+    try {
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ fullName, email, password }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Something went wrong');
+      }
+
+      // On successful signup, redirect to onboarding
+      setLocation("/onboarding");
+    } catch (err) {
+      setError((err as Error).message);
+      console.error("Signup failed:", err);
+    }
   };
 
   return (
@@ -43,6 +64,11 @@ export default function Signup() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
+              {error && (
+                <div className="bg-destructive/10 p-3 rounded-md flex items-center gap-x-2 text-sm text-destructive">
+                  <p>{error}</p>
+                </div>
+              )}
               <div className="space-y-2">
                 <Label htmlFor="fullname">Full Name</Label>
                 <Input

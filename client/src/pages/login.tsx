@@ -13,12 +13,33 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
     console.log("Login attempt:", { email, password });
-    // TODO: Implement actual authentication
-    setLocation("/dashboard");
+
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Invalid credentials');
+      }
+
+      // On successful login, redirect to the dashboard
+      setLocation("/dashboard");
+    } catch (err) {
+      setError((err as Error).message);
+      console.error("Login failed:", err);
+    }
   };
 
   return (
@@ -42,6 +63,11 @@ export default function Login() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
+              {error && (
+                <div className="bg-destructive/10 p-3 rounded-md flex items-center gap-x-2 text-sm text-destructive">
+                  <p>{error}</p>
+                </div>
+              )}
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input

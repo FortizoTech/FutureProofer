@@ -89,7 +89,7 @@ export default function Landing() {
       </nav>
 
       {/* Hero Section */}
-      <section className="py-20 md:py-32 bg-gradient-to-br from-background via-background to-primary/5">
+      <section className="pt-12 pb-20 md:pt-20 md:pb-32 bg-gradient-to-br from-background via-background to-primary/5">
         <div className="container max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">

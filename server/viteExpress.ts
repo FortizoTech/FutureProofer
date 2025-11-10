@@ -21,9 +21,9 @@ export default async function viteExpress(app: express.Application) {
       try {
         const url = req.originalUrl;
 
-        // Read the template file from the project root
+        // Read the template file from the client directory
         const templateHtml = await readFile(
-          path.resolve(__dirname, "../../index.html"),
+          path.resolve(__dirname, "../../client/index.html"),
           "utf-8"
         );
 
@@ -37,7 +37,7 @@ export default async function viteExpress(app: express.Application) {
       }
     });
   } else {
-    const distPath = path.resolve(__dirname, "../../dist");
+    const distPath = path.resolve(__dirname, "../public");
     app.use(express.static(distPath));
     app.use("*", (req, res) => {
       res.sendFile(path.resolve(distPath, "index.html"));
