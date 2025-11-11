@@ -12,6 +12,7 @@ export const users = pgTable("users", {
   mode: text("mode", { enum: ["career", "business"] }).notNull(),
   profileData: jsonb("profile_data"),
   createdAt: timestamp("created_at").defaultNow(),
+  lastLogin: timestamp("last_login").defaultNow(),
 });
 
 export const insights = pgTable("insights", {

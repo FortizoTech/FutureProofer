@@ -1,12 +1,16 @@
 
 import { Router } from 'express';
-import { db } from './storage';
-import { users } from './db/schema';
-import { eq } from 'drizzle-orm';
+import { storage } from './storage.js';
 import bcrypt from 'bcrypt';
+import { OAuth2Client } from 'google-auth-library';
+import jwt from 'jsonwebtoken';
+import { eq } from 'drizzle-orm';
+import { users } from './db/schema.js';
+import { db } from './storage.js';
 
 const authRouter = Router();
 const saltRounds = 10;
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // Signup route
 authRouter.post('/signup', async (req, res) => {
@@ -20,9 +24,7 @@ authRouter.post('/signup', async (req, res) => {
   }
 
   try {
-    const existingUser = await db.query.users.findFirst({
-      where: eq(users.email, email),
-    });
+    const existingUser = await storage.getUserByUsername(email);
 
     if (existingUser) {
       return res.status(409).json({ message: 'User with this email already exists' });
@@ -30,14 +32,16 @@ authRouter.post('/signup', async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    const newUser = await db.insert(users).values({
+    const newUser = await storage.createUser({
+      username: email,
       fullName,
       email,
       password: hashedPassword,
-    }).returning({ id: users.id, email: users.email, fullName: users.fullName });
+      mode: 'career', // default mode
+    });
 
     // In a real app, you'd probably issue a session token here
-    res.status(201).json({ message: 'User created successfully', user: newUser[0] });
+    res.status(201).json({ message: 'User created successfully', user: { id: newUser.id, email: newUser.email, fullName: newUser.fullName } });
   } catch (error) {
     console.error('Signup error:', error);
     res.status(500).json({ message: 'Internal server error' });
@@ -53,9 +57,7 @@ authRouter.post('/login', async (req, res) => {
   }
 
   try {
-    const user = await db.query.users.findFirst({
-      where: eq(users.email, email),
-    });
+    const user = await storage.getUserByUsername(email);
 
     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials' });
@@ -66,7 +68,7 @@ authRouter.post('/login', async (req, res) => {
     if (!isPasswordValid) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
-    
+
     const { password: _, ...userWithoutPassword } = user;
 
     // In a real app, you'd issue a session token here
@@ -74,6 +76,67 @@ authRouter.post('/login', async (req, res) => {
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Google OAuth route
+authRouter.post('/google', async (req, res) => {
+  const { idToken } = req.body;
+
+  if (!idToken) {
+    return res.status(400).json({ message: 'ID token is required' });
+  }
+
+  try {
+    // Verify the ID token
+    const ticket = await googleClient.verifyIdToken({
+      idToken,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    const payload = ticket.getPayload();
+
+    if (!payload) {
+      return res.status(400).json({ message: 'Invalid ID token' });
+    }
+
+    // Extract user data
+    const googleId = payload.sub!;
+    const fullName = payload.name!;
+    const email = payload.email!;
+    const picture = payload.picture;
+
+    // Check if user exists
+    const existingUser = await db.query.users.findFirst({
+      where: eq(users.email, email),
+    });
+
+    let user;
+    if (existingUser) {
+      // Update last login
+      [user] = await db.update(users).set({ lastLogin: new Date() }).where(eq(users.id, existingUser.id)).returning();
+    } else {
+      // Create new user
+      [user] = await db.insert(users).values({
+        username: email, // Use email as username for Google users
+        password: '', // No password for OAuth users
+        fullName,
+        email,
+        mode: 'career', // Default mode
+        profileData: { googleId, picture },
+      }).returning();
+    }
+
+    // Generate JWT
+    const token = jwt.sign(
+      { userId: user.id, email: user.email },
+      process.env.JWT_SECRET!,
+      { expiresIn: '7d' }
+    );
+
+    res.status(200).json({ message: 'Login successful', user: { id: user.id, email: user.email, fullName: user.fullName }, token });
+  } catch (error) {
+    console.error('Google auth error:', error);
+    res.status(500).json({ message: 'Authentication failed' });
   }
 });
 

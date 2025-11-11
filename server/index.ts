@@ -1,10 +1,11 @@
 
+import 'dotenv/config';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import express from 'express';
 import { createServer } from 'vite';
 import { readFile } from "node:fs/promises";
-import apiRouter from './routes.js'; // Make sure your build process outputs .js or resolves this
+import { api as apiRouter } from './routes.js'; // Make sure your build process outputs .js or resolves this
 
 const app = express();
 const port = process.env.PORT || 3001;

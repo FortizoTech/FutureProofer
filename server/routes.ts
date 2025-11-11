@@ -1,14 +1,33 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { storage } from "./storage.js";
+import { storage, db } from "./storage.js";
 import { Router } from "express";
+import authRouter from "./auth.js";
+import { sql } from 'drizzle-orm';
 
 const api = Router();
 
-// Example API route
-api.get("/health", (req, res) => {
-  res.json({ status: "ok" });
+// Health check endpoint
+api.get("/health", async (req, res) => {
+  try {
+    // Test database connection
+    await db.execute(sql`SELECT 1`);
+    res.json({ 
+      status: "ok",
+      database: "connected"
+    });
+  } catch (error) {
+    console.error('Database connection error:', error);
+    res.status(500).json({ 
+      status: "error",
+      database: "connection failed",
+      error: error.message
+    });
+  }
 });
+
+// Auth routes
+api.use('/auth', authRouter);
 
 // Add other API routes here
 

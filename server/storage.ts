@@ -1,21 +1,11 @@
-import { type User, type InsertUser } from "@shared/schema";
-import { randomUUID } from "crypto";
-import { drizzle } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
-import * as schema from './db/schema';
+import { type User, type InsertUser } from "../shared/schema.js";
+import { neon } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-http';
+import { eq } from 'drizzle-orm';
+import { users } from './db/schema.js';
 
-const connectionString = process.env.DATABASE_URL;
-
-if (!connectionString) {
-  throw new Error('DATABASE_URL environment variable is not set');
-}
-
-// Disable prefetch as it is not supported for "Transaction" pool mode
-const client = postgres(connectionString, { prepare: false });
-export const db = drizzle(client, { schema });
-
-// modify the interface with any CRUD methods
-// you might need
+const sql = neon(process.env.DATABASE_URL!);
+export const db = drizzle(sql, { schema: { users } });
 
 export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
@@ -23,34 +13,25 @@ export interface IStorage {
   createUser(user: InsertUser): Promise<User>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<string, User>;
-
-  constructor() {
-    this.users = new Map();
-  }
-
+export class DrizzleStorage implements IStorage {
   async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
+    const result = await db.query.users.findFirst({
+      where: eq(users.id, id),
+    });
+    return result;
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
+    const result = await db.query.users.findFirst({
+      where: eq(users.username, username),
+    });
+    return result;
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    const id = randomUUID();
-    const user: User = { 
-      ...insertUser, 
-      id, 
-      profileData: insertUser.profileData || null,
-      createdAt: new Date() 
-    };
-    this.users.set(id, user);
+    const [user] = await db.insert(users).values(insertUser).returning();
     return user;
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DrizzleStorage();

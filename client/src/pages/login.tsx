@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,13 +11,68 @@ import logoUrl from "@assets/Future_Proofer_Logo-ig-square-1080-1080-removebg-pr
 export default function Login() {
   const [, setLocation] = useLocation();
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    // Load Google Identity Services script
+    const script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.async = true;
+    script.defer = true;
+    script.onload = () => {
+      console.log('Google script loaded');
+      if (window.google) {
+        window.google.accounts.id.initialize({
+          client_id: (import.meta as any).env.VITE_GOOGLE_CLIENT_ID,
+          callback: handleGoogleSignIn,
+        });
+        window.google.accounts.id.renderButton(
+          document.getElementById('google-signin-button-login'),
+          { theme: 'outline', size: 'large' }
+        );
+      }
+    };
+    document.head.appendChild(script);
+
+    return () => {
+      // Cleanup script on unmount
+      const existingScript = document.querySelector('script[src="https://accounts.google.com/gsi/client"]');
+      if (existingScript) {
+        document.head.removeChild(existingScript);
+      }
+    };
+  }, []);
+
+  const handleGoogleSignIn = async (response: any) => {
+    try {
+      const res = await fetch('/api/auth/google', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ idToken: response.credential }),
+      });
+
+      if (!res.ok) {
+        throw new Error('Google sign-in failed');
+      }
+
+      const data = await res.json();
+      localStorage.setItem('token', data.token);
+      setLocation('/onboarding');
+    } catch (err) {
+      setError('Google sign-in failed. Please try again.');
+      console.error('Google sign-in error:', err);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setIsLoading(true);
     console.log("Login attempt:", { email, password });
 
     try {
@@ -39,6 +94,8 @@ export default function Login() {
     } catch (err) {
       setError((err as Error).message);
       console.error("Login failed:", err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -126,9 +183,20 @@ export default function Login() {
                 </label>
               </div>
 
-              <Button type="submit" className="w-full" size="lg" data-testid="button-login">
-                Log In
+              <Button type="submit" className="w-full" size="lg" data-testid="button-login" disabled={isLoading}>
+                {isLoading ? "Logging in..." : "Log In"}
               </Button>
+
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+                </div>
+              </div>
+
+              <div id="google-signin-button-login" className="flex justify-center"></div>
 
               <div className="text-center text-sm">
                 <span className="text-muted-foreground">Don't have an account? </span>
