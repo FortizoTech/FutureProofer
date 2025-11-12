@@ -12,7 +12,7 @@ const port = process.env.PORT || 3001;
 
 // Common setup
 app.use(express.json());
-app.use('/api', apiRouter);
+app.use(apiRouter);
 
 // Set COOP header for Google popup
 app.use((req, res, next) => {
