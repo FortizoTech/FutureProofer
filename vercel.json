@@ -9,18 +9,18 @@
       }
     },
     {
-      "src": "server/dist/index.js",
+      "src": "api/index.js",
       "use": "@vercel/node"
     }
   ],
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/server/dist/index.js"
+      "destination": "/api"
     },
     {
       "source": "/((?!api/|assets/).*)",
-      "destination": "/index.html"
+      "destination": "/dist/client/index.html"
     }
   ]
 }
