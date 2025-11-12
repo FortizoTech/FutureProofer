@@ -84,11 +84,25 @@ export default function Login() {
         body: JSON.stringify({ email, password }),
       });
 
+      let data;
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Invalid credentials');
+        let errorMsg = `Login failed: ${response.status}`;
+        try {
+          const errorData = await response.json();
+          errorMsg = errorData.message || errorMsg;
+        } catch (parseErr) {
+          console.error('Failed to parse error response:', parseErr);
+        }
+        throw new Error(errorMsg);
       }
 
+      try {
+        data = await response.json();
+      } catch (parseErr) {
+        throw new Error('Invalid server response');
+      }
+
+      localStorage.setItem('token', data.token);
       // On successful login, redirect to the dashboard
       setLocation("/dashboard");
     } catch (err) {

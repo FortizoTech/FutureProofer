@@ -1,4 +1,3 @@
-
 import { Router } from 'express';
 import { storage } from './storage.js';
 import bcrypt from 'bcrypt';
@@ -10,7 +9,21 @@ import { db } from './storage.js';
 
 const authRouter = Router();
 const saltRounds = 10;
-const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+console.log('Auth init: DATABASE_URL', process.env.DATABASE_URL ? 'set' : 'missing');
+console.log('Auth init: GOOGLE_CLIENT_ID', process.env.GOOGLE_CLIENT_ID ? 'set' : 'missing');
+console.log('Auth init: JWT_SECRET', process.env.JWT_SECRET ? 'set' : 'missing');
+
+let googleClient;
+try {
+  if (!process.env.GOOGLE_CLIENT_ID) {
+    throw new Error('GOOGLE_CLIENT_ID environment variable is not set');
+  }
+  googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+} catch (error) {
+  console.error('Google client initialization error:', error);
+  googleClient = null;
+}
 
 // Signup route
 authRouter.post('/signup', async (req, res) => {
@@ -40,11 +53,20 @@ authRouter.post('/signup', async (req, res) => {
       mode: 'career', // default mode
     });
 
-    // In a real app, you'd probably issue a session token here
-    res.status(201).json({ message: 'User created successfully', user: { id: newUser.id, email: newUser.email, fullName: newUser.fullName } });
+    if (!process.env.JWT_SECRET) {
+      throw new Error('JWT_SECRET environment variable is not set');
+    }
+
+    const token = jwt.sign(
+      { userId: newUser.id, email: newUser.email },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    res.status(201).json({ message: 'User created successfully', user: { id: newUser.id, email: newUser.email, fullName: newUser.fullName }, token });
   } catch (error) {
     console.error('Signup error:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: (error as Error).message || 'Internal server error' });
   }
 });
 
@@ -71,11 +93,20 @@ authRouter.post('/login', async (req, res) => {
 
     const { password: _, ...userWithoutPassword } = user;
 
-    // In a real app, you'd issue a session token here
-    res.status(200).json({ message: 'Login successful', user: userWithoutPassword });
+    if (!process.env.JWT_SECRET) {
+      throw new Error('JWT_SECRET environment variable is not set');
+    }
+
+    const token = jwt.sign(
+      { userId: user.id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    res.status(200).json({ message: 'Login successful', user: userWithoutPassword, token });
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: (error as Error).message || 'Internal server error' });
   }
 });
 
@@ -85,6 +116,10 @@ authRouter.post('/google', async (req, res) => {
 
   if (!idToken) {
     return res.status(400).json({ message: 'ID token is required' });
+  }
+
+  if (!googleClient) {
+    return res.status(500).json({ message: 'Google client not initialized. Check GOOGLE_CLIENT_ID environment variable.' });
   }
 
   try {
@@ -104,6 +139,10 @@ authRouter.post('/google', async (req, res) => {
     const fullName = payload.name!;
     const email = payload.email!;
     const picture = payload.picture;
+
+    if (!db) {
+      throw new Error('Database connection not available. Check DATABASE_URL environment variable.');
+    }
 
     // Check if user exists
     const existingUser = await db.query.users.findFirst({
@@ -126,17 +165,21 @@ authRouter.post('/google', async (req, res) => {
       }).returning();
     }
 
+    if (!process.env.JWT_SECRET) {
+      throw new Error('JWT_SECRET environment variable is not set');
+    }
+
     // Generate JWT
     const token = jwt.sign(
       { userId: user.id, email: user.email },
-      process.env.JWT_SECRET!,
+      process.env.JWT_SECRET,
       { expiresIn: '7d' }
     );
 
     res.status(200).json({ message: 'Login successful', user: { id: user.id, email: user.email, fullName: user.fullName }, token });
   } catch (error) {
     console.error('Google auth error:', error);
-    res.status(500).json({ message: 'Authentication failed' });
+    res.status(500).json({ message: (error as Error).message || 'Authentication failed' });
   }
 });
 

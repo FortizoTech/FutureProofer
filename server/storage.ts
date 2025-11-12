@@ -4,8 +4,20 @@ import { drizzle } from 'drizzle-orm/neon-http';
 import { eq } from 'drizzle-orm';
 import { users } from './db/schema.js';
 
-const sql = neon(process.env.DATABASE_URL!);
-export const db = drizzle(sql, { schema: { users } });
+console.log('Storage init: DATABASE_URL', process.env.DATABASE_URL ? 'set' : 'missing');
+
+let sql;
+try {
+  if (!process.env.DATABASE_URL) {
+    throw new Error('DATABASE_URL environment variable is not set');
+  }
+  sql = neon(process.env.DATABASE_URL);
+} catch (error) {
+  console.error('Database initialization error:', error);
+  sql = null;
+}
+
+export const db = sql ? drizzle(sql, { schema: { users } }) : null;
 
 export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
@@ -15,6 +27,9 @@ export interface IStorage {
 
 export class DrizzleStorage implements IStorage {
   async getUser(id: string): Promise<User | undefined> {
+    if (!db) {
+      throw new Error('Database connection not available. Check DATABASE_URL environment variable.');
+    }
     const result = await db.query.users.findFirst({
       where: eq(users.id, id),
     });
@@ -22,6 +37,9 @@ export class DrizzleStorage implements IStorage {
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
+    if (!db) {
+      throw new Error('Database connection not available. Check DATABASE_URL environment variable.');
+    }
     const result = await db.query.users.findFirst({
       where: eq(users.username, username),
     });
@@ -29,6 +47,9 @@ export class DrizzleStorage implements IStorage {
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
+    if (!db) {
+      throw new Error('Database connection not available. Check DATABASE_URL environment variable.');
+    }
     const [user] = await db.insert(users).values(insertUser).returning();
     return user;
   }
