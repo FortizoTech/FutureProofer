@@ -14,6 +14,12 @@ const port = process.env.PORT || 3001;
 app.use(express.json());
 app.use('/api', apiRouter);
 
+// Set COOP header for Google popup
+app.use((req, res, next) => {
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+  next();
+});
+
 // --- Development-only logic ---
 if (process.env.NODE_ENV !== 'production') {
   const __filename = fileURLToPath(import.meta.url);
@@ -51,9 +57,12 @@ if (process.env.NODE_ENV !== 'production') {
   // Vercel will handle serving the frontend.
 }
 
-app.listen(port, () => {
-  console.log(`Server listening on http://localhost:${port}`);
-});
+// Only listen in development mode or when explicitly running the server
+if (process.env.NODE_ENV !== 'production' || process.env.VERCEL !== '1') {
+  app.listen(port, () => {
+    console.log(`Server listening on http://localhost:${port}`);
+  });
+}
 
-// Add this export for Vercel
+// Export for Vercel serverless function
 export default app;
