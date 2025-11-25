@@ -29,33 +29,109 @@ export function ChatInterface({ title = "BusinessMate AI", suggestions = [] }: C
     },
   ]);
   const [input, setInput] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
 
-  const handleSend = () => {
-    if (!input.trim()) return;
+  const handleSend = (text?: string) => {
+    const prompt = (text ?? input).trim();
+    if (!prompt) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
       role: "user",
-      content: input,
+      content: prompt,
       timestamp: new Date(),
     };
 
-    setMessages([...messages, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setInput("");
+    setIsTyping(true);
+
+    const getMockResponse = (p: string) => {
+      const lower = p.toLowerCase();
+      if (lower.includes("skill") || lower.includes("learn")) {
+        return (
+          "Recommended Skills (West Africa Focus)\n" +
+          "• Python + Pandas (45% demand growth)\n" +
+          "• Data Visualization (Tableau/Power BI)\n" +
+          "• Cloud Fundamentals (AWS/Azure/GCP)\n\n" +
+          "Action Plan\n" +
+          "1) 6-week Python intensive (5–7 hrs/wk)\n" +
+          "2) Build 2 portfolio projects with local datasets\n" +
+          "3) Earn a beginner cloud cert (AWS Cloud Practitioner)"
+        );
+      }
+      if (lower.includes("market") || lower.includes("opportunit")) {
+        return (
+          "Market Snapshot\n" +
+          "• Remote data roles +67% YoY\n" +
+          "• SME digitization driving analytics demand\n" +
+          "• Cloud skills seen in 60% of job posts\n\n" +
+          "Top Opportunities\n" +
+          "1) Analytics for SMEs in retail/fintech\n" +
+          "2) Remote junior data roles (global)\n" +
+          "3) Local gov/open data projects"
+        );
+      }
+      if (lower.includes("career") || lower.includes("trajectory")) {
+        return (
+          "Career Trajectory Forecast (8 months)\n" +
+          "• Skill match: 87% → 92%\n" +
+          "• Network growth: +156 connections\n" +
+          "• Interview rate: +35%\n\n" +
+          "Recommendations\n" +
+          "• Publish 2 case studies\n" +
+          "• Apply to 10 curated roles/month\n" +
+          "• Join 2 local tech communities"
+        );
+      }
+      if (lower.includes("trend") || lower.includes("west africa")) {
+        return (
+          "Regional Trends\n" +
+          "• AI/ML demand +45%\n" +
+          "• Cloud adoption accelerating\n" +
+          "• Remote-first hiring growing\n\n" +
+          "Next Steps\n" +
+          "• Strengthen portfolio with 3 projects\n" +
+          "• Target hybrid roles with growth paths\n" +
+          "• Build LinkedIn presence (weekly posts)"
+        );
+      }
+      if (lower.includes("business") || lower.includes("sme")) {
+        return (
+          "SME Strategy Ideas\n" +
+          "• Introduce analytics dashboards (low-cost)\n" +
+          "• Upsell via lifecycle email + WhatsApp\n" +
+          "• Pilot remote delivery to expand TAM\n\n" +
+          "ROI Estimates (3–6 months)\n" +
+          "• Revenue +15–25%\n" +
+          "• CAC -10% with better targeting\n" +
+          "• Churn -8% via usage nudges"
+        );
+      }
+      return (
+        "Thanks for the prompt! Here’s a tailored plan:\n\n" +
+        "1) Clarify your immediate goal (role, skill, or business KPI)\n" +
+        "2) Pick one 4–6 week learning sprint\n" +
+        "3) Build a small portfolio artifact for every sprint\n" +
+        "4) Share outcomes publicly to attract inbound opportunities\n\n" +
+        "Ask me for a personalized 30–60–90 day plan."
+      );
+    };
 
     setTimeout(() => {
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: "I understand your question. Based on the latest market trends and your profile, I recommend focusing on emerging skills in your field. Would you like me to provide a detailed analysis?",
+        content: getMockResponse(prompt),
         timestamp: new Date(),
       };
-      setMessages(prev => [...prev, aiMessage]);
-    }, 1000);
+      setMessages((prev) => [...prev, aiMessage]);
+      setIsTyping(false);
+    }, 900);
   };
 
   const handleSuggestion = (suggestion: string) => {
-    setInput(suggestion);
+    handleSend(suggestion);
   };
 
   return (
@@ -87,7 +163,7 @@ export function ChatInterface({ title = "BusinessMate AI", suggestions = [] }: C
               </Avatar>
               <div className={`flex flex-col gap-1 max-w-[80%] ${message.role === "user" ? "items-end" : ""}`}>
                 <div
-                  className={`px-4 py-3 rounded-lg ${
+                  className={`px-4 py-3 rounded-lg whitespace-pre-wrap ${
                     message.role === "assistant"
                       ? "bg-muted"
                       : "bg-primary text-primary-foreground"
@@ -124,6 +200,9 @@ export function ChatInterface({ title = "BusinessMate AI", suggestions = [] }: C
         </div>
       )}
 
+      {isTyping && (
+        <div className="px-6 py-2 text-xs text-muted-foreground">BusinessMate is typing...</div>
+      )}
       <div className="p-6 border-t border-card-border">
         <form
           onSubmit={(e) => {
@@ -139,7 +218,7 @@ export function ChatInterface({ title = "BusinessMate AI", suggestions = [] }: C
             className="flex-1"
             data-testid="input-chat-message"
           />
-          <Button type="submit" size="icon" data-testid="button-send-message">
+          <Button type="submit" size="icon" data-testid="button-send-message" disabled={isTyping} aria-busy={isTyping}>
             <Send className="h-4 w-4" />
           </Button>
         </form>
