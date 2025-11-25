@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { BookOpen, Target, Award, Clock, CheckCircle2, Lock, Sparkles } from "lucide-react";
 import { CourseCard } from "@/components/course-card";
+import AuthLayout from "@/components/auth-layout";
 
 export default function LearningPaths() {
   const activePath = {
@@ -100,6 +101,7 @@ export default function LearningPaths() {
   const progressPercentage = (activePath.completedCourses / activePath.totalCourses) * 100;
 
   return (
+    <AuthLayout>
     <div className="space-y-8">
       <div>
         <h1 className="font-serif text-3xl font-bold mb-2" data-testid="text-page-title">Learning Paths</h1>
@@ -328,5 +330,6 @@ export default function LearningPaths() {
         </div>
       </div>
     </div>
+    </AuthLayout>
   );
 }

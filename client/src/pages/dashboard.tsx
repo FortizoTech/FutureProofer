@@ -3,6 +3,7 @@ import { InsightCard } from "@/components/insight-card";
 import { ForecastChart } from "@/components/forecast-chart";
 import { Target, Briefcase, TrendingUp, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import AuthLayout from "@/components/auth-layout";
 
 export default function Dashboard() {
   // Mock data - will be replaced with real data
@@ -18,6 +19,7 @@ export default function Dashboard() {
   ];
 
   return (
+    <AuthLayout>
     <div className="space-y-8">
       <div>
         <h1 className="font-serif text-3xl font-bold mb-2" data-testid="text-page-title">Career Dashboard</h1>
@@ -104,5 +106,6 @@ export default function Dashboard() {
         </div>
       </div>
     </div>
+    </AuthLayout>
   );
 }

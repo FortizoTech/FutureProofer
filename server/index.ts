@@ -12,6 +12,8 @@ const port = process.env.PORT || 3001;
 
 // Common setup
 app.use(express.json());
+// Always mount API under /api so paths align both locally and on Vercel serverless
+// Vercel rewrites /api/:path* to the serverless function while preserving the path
 app.use('/api', apiRouter);
 
 // Set COOP header for Google popup
