@@ -7,6 +7,7 @@ import { Switch, Route } from "wouter";
 import Signup from "@/pages/signup";
 import Onboarding from "@/pages/onboarding";
 import Login from "@/pages/login";
+import Dashboard from "@/pages/dashboard";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 export default function App() {
@@ -19,6 +20,7 @@ export default function App() {
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
             <Route path="/onboarding" component={Onboarding} />
+            <Route path="/dashboard" component={Dashboard} />
             {/* Default route for 404 */}
             <Route>
               <NotFound />
