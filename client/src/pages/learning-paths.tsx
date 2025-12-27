@@ -1,7 +1,9 @@
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BookOpen, Target, Award, Clock, CheckCircle2, Lock, Sparkles } from "lucide-react";
 import { useUser } from "@/context/user-context";
 
@@ -9,7 +11,13 @@ import { COURSES_DATA } from "@/lib/mock-db";
 
 export default function LearningPaths() {
   const { user } = useUser();
-  const career = user.selectedCareer || "General Business";
+  const [activePathKey, setActivePathKey] = useState<string>(user.selectedCareer || "General Business");
+
+  useEffect(() => {
+    if (user.selectedCareer && COURSES_DATA[user.selectedCareer]) {
+      setActivePathKey(user.selectedCareer);
+    }
+  }, [user.selectedCareer]);
 
   interface Course {
     id: number;
@@ -34,8 +42,19 @@ export default function LearningPaths() {
     courses: Course[];
   }
 
-  // Get path data based on career, fallback to General Business if not found
-  const activePathData = (COURSES_DATA[career as keyof typeof COURSES_DATA] || COURSES_DATA["General Business"]) as PathData;
+  // Find all paths relevant to the user's skills
+  const relevantPathKeys = Object.keys(COURSES_DATA).filter(key => {
+    if (key === user.selectedCareer) return true;
+    const pathData = COURSES_DATA[key];
+    // Check for skill overlap
+    return pathData.skills.some((skill: string) => user.selectedSkills?.includes(skill));
+  });
+
+  const availablePaths = Array.from(new Set([user.selectedCareer || "General Business", ...relevantPathKeys]))
+    .filter(k => COURSES_DATA[k]);
+
+  // Get path data based on active key
+  const activePathData = (COURSES_DATA[activePathKey] || COURSES_DATA["General Business"]) as PathData;
 
   const activePath = {
     title: activePathData.title,
@@ -84,6 +103,23 @@ export default function LearningPaths() {
         <h1 className="font-serif text-3xl font-bold mb-2" data-testid="text-page-title">Learning Paths</h1>
         <p className="text-muted-foreground">Structured learning journeys designed to master in-demand skills</p>
       </div>
+
+      {/* Path Selector if multiple paths available */}
+      {availablePaths.length > 1 && (
+        <Tabs value={activePathKey} onValueChange={setActivePathKey} className="w-full">
+          <TabsList className="w-full justify-start overflow-x-auto bg-transparent p-0 gap-2 h-auto">
+            {availablePaths.map(key => (
+              <TabsTrigger
+                key={key}
+                value={key}
+                className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary border border-transparent data-[state=active]:border-primary/20 rounded-full px-4 py-2"
+              >
+                {COURSES_DATA[key].title}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+      )}
 
       {/* Active Path Overview */}
       <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-accent/5">
