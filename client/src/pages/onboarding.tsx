@@ -90,9 +90,12 @@ export default function Onboarding() {
       <div className="fixed inset-x-0 top-0 z-50 bg-background/60 backdrop-blur-md border-b border-white/10 px-6 py-4 transition-all">
         <div className="max-w-4xl mx-auto text-center">
           <img src={logoUrl} alt="Future Proofer" className="h-10 w-10 mx-auto mb-3 drop-shadow-2xl" />
-          <h1 className="font-serif text-3xl md:text-4xl font-light mb-1 tracking-tight bg-gradient-to-r from-primary via-white to-primary bg-clip-text text-transparent drop-shadow-lg relative inline-block">
-            Future Proofer
-            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-40 blur-xl -z-10" />
+          <h1 className="font-serif text-3xl md:text-4xl font-light mb-1 tracking-tight relative inline-block">
+            <span className="bg-gradient-to-b from-white via-gray-200 to-gray-400 bg-clip-text text-transparent drop-shadow-md">
+              Future Proofer
+            </span>
+            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent opacity-50 blur-xl pointer-events-none" />
+            <span className="absolute inset-0 bg-white/10 blur-lg opacity-30 -z-10" />
           </h1>
           <p className="text-muted-foreground font-light tracking-wide uppercase text-[10px]">
             AI Foresight Engine Initialization
