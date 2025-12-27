@@ -45,6 +45,10 @@ export default function LearningPaths() {
   // Find all paths relevant to the user's skills
   const relevantPathKeys = Object.keys(COURSES_DATA).filter(key => {
     if (key === user.selectedCareer) return true;
+
+    // Check if the path name itself is a selected skill
+    if (user.selectedSkills?.includes(key)) return true;
+
     const pathData = COURSES_DATA[key];
     // Check for skill overlap
     return pathData.skills.some((skill: string) => user.selectedSkills?.includes(skill));
