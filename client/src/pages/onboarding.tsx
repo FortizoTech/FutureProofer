@@ -83,7 +83,7 @@ export default function Onboarding() {
   const outlineButtonClass = "border-white/20 hover:bg-white/5 text-muted-foreground hover:text-foreground rounded-full px-6";
 
   return (
-    <div className="min-h-screen flex flex-col items-center relative overflow-y-auto font-sans bg-background">
+    <div className="min-h-screen flex flex-col items-center relative overflow-y-auto font-sans">
       <AnimatedBackground step={step} className="opacity-100" />
 
       {/* Fixed Header */}
