@@ -108,41 +108,26 @@ export default function LearningPaths() {
         <p className="text-muted-foreground">Structured learning journeys designed to master in-demand skills</p>
       </div>
 
-      {/* Path Selector using Folders if multiple paths available */}
+      {/* Path Selector using single Folder if multiple paths available */}
       {availablePaths.length > 1 && (
-        <div className="w-full">
-          <h2 className="font-serif text-xl font-semibold mb-6 text-center">Select Your Learning Path</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
-            {availablePaths.map((key, index) => {
+        <div className="w-full flex flex-col items-center">
+          <h2 className="font-serif text-xl font-semibold mb-6 text-center">Your Learning Paths</h2>
+          <Folder
+            color="#5227FF"
+            size={1.2}
+            label="Click to explore your paths"
+            items={availablePaths.map(key => {
               const pathData = COURSES_DATA[key];
-              const colors = ['#5227FF', '#FF6B35', '#00C9A7', '#845EC2', '#FF9671'];
-              const folderColor = colors[index % colors.length];
-
-              return (
-                <Folder
-                  key={key}
-                  color={folderColor}
-                  size={1}
-                  label={pathData.title}
-                  items={[
-                    {
-                      label: `${pathData.totalCourses} Courses`,
-                      onClick: () => setActivePathKey(key)
-                    },
-                    {
-                      label: pathData.level,
-                      onClick: () => setActivePathKey(key)
-                    },
-                    {
-                      label: pathData.estimatedTime,
-                      onClick: () => setActivePathKey(key)
-                    }
-                  ]}
-                  className={activePathKey === key ? 'ring-2 ring-primary ring-offset-4 rounded-lg' : ''}
-                />
-              );
+              return {
+                label: pathData.title,
+                onClick: () => setActivePathKey(key)
+              };
             })}
-          </div>
+            className="mb-4"
+          />
+          <p className="text-sm text-muted-foreground text-center mt-4">
+            Currently viewing: <span className="font-semibold text-primary">{COURSES_DATA[activePathKey]?.title}</span>
+          </p>
         </div>
       )}
 
