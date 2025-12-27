@@ -1,16 +1,16 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useLocation } from "wouter";
-import { useUser } from "@/context/user-context";
-import { AnimatedBackground } from "@/components/animated-backgrounds";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ModeSelector } from "@/components/mode-selector";
+import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Check, ChevronRight, Briefcase, TrendingUp, ArrowLeft, Sparkles, MapPin, Building2 } from "lucide-react";
 import logoUrl from "@assets/Future_Proofer_Logo-ig-square-1080-1080-removebg-preview_1762643734864.png";
-import { cn } from "@/lib/utils";
+import { useLocation } from "wouter";
+import { useUser } from "@/context/user-context";
+import { AnimatedBackground } from "@/components/animated-backgrounds";
 
 export default function Onboarding() {
   const [, setLocation] = useLocation();
@@ -20,7 +20,7 @@ export default function Onboarding() {
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
-  const [locationInput, setLocationInput] = useState("");
+  const [location, setLocationInput] = useState("");
   const [industry, setIndustry] = useState("");
   const [goals, setGoals] = useState("");
 
@@ -38,6 +38,7 @@ export default function Onboarding() {
   };
 
   const handleGetStarted = () => {
+    // Determine primary career based on selected skills
     const careerMapping: Record<string, string> = {
       "Data Science": "Data Science",
       "Machine Learning": "Data Science",
@@ -53,372 +54,218 @@ export default function Onboarding() {
       ? careerMapping[selectedSkills[0]] || selectedSkills[0]
       : "";
 
+    // Save all data to UserContext
     updateUser({
       fullName,
-      location: locationInput,
+      location,
       selectedCareer,
       selectedSkills,
       userType: mode || 'career',
       bio: goals,
     });
 
+    // Navigate to dashboard
     setLocation('/dashboard');
   };
 
-  const nextStep = () => setStep(s => Math.min(s + 1, 4));
-  const prevStep = () => setStep(s => Math.max(s - 1, 1));
-
-  const variants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? 50 : -50,
-      opacity: 0,
-    }),
-    center: {
-      x: 0,
-      opacity: 1,
-    },
-    exit: (direction: number) => ({
-      x: direction < 0 ? 50 : -50,
-      opacity: 0,
-    }),
-  };
+  const progress = (step / 4) * 100;
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center relative overflow-hidden font-sans text-foreground selection:bg-primary/30">
-      {/* Background */}
-      <AnimatedBackground step={step} className="opacity-60" />
+    <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
+      <AnimatedBackground step={step} />
 
-      {/* Noise Overlay */}
-      <div className="fixed inset-0 z-0 pointer-events-none opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
-
-      {/* Main Glass Card */}
-      <motion.div
-        initial={{ opacity: 0, y: 20, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="relative z-10 w-full max-w-5xl min-h-[650px] bg-white/5 backdrop-blur-2xl border border-white/10 shadow-2xl rounded-3xl flex flex-col overflow-hidden m-4"
-      >
-        {/* Header */}
-        <div className="p-8 md:px-12 md:py-8 flex items-center justify-between border-b border-white/5 bg-white/5">
-          <div className="flex items-center gap-4">
-            <img src={logoUrl} alt="Logo" className="h-10 w-10 drop-shadow-md" />
-            <div>
-              <h1 className="font-serif text-2xl tracking-tight text-foreground/90">Future Proofer</h1>
-              <p className="text-[10px] text-muted-foreground uppercase tracking-[0.2em] font-medium">AI Foresight Engine</p>
-            </div>
-          </div>
-          {/* Progress Dots */}
-          <div className="flex gap-3">
-            {[1, 2, 3, 4].map((i) => (
-              <motion.div
-                key={i}
-                layout
-                className={cn(
-                  "h-1.5 rounded-full transition-colors duration-500",
-                  step === i
-                    ? "w-8 bg-primary shadow-[0_0_15px_rgba(59,130,246,0.5)]"
-                    : step > i
-                      ? "w-1.5 bg-primary/50"
-                      : "w-1.5 bg-white/10"
-                )}
-              />
-            ))}
-          </div>
+      <div className="w-full max-w-3xl z-10 relative">
+        <div className="text-center mb-8">
+          <img src={logoUrl} alt="Future Proofer" className="h-16 w-16 mx-auto mb-4 drop-shadow-lg" />
+          <h1 className="font-serif text-3xl font-bold mb-2">Welcome to Future Proofer</h1>
+          <p className="text-muted-foreground font-medium">Let's set up your personalized AI foresight experience</p>
         </div>
 
-        {/* Content Area */}
-        <div className="flex-1 p-8 md:p-12 relative flex flex-col justify-center">
-          <AnimatePresence mode="wait" custom={step}>
+        <div className="mb-6">
+          <Progress value={progress} className="h-2" />
+          <p className="text-sm text-muted-foreground mt-2 text-center font-medium">Step {step} of 4</p>
+        </div>
 
-            {/* Step 1: Focus Mode */}
-            {step === 1 && (
-              <motion.div
-                key="step1"
-                custom={1}
-                variants={variants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ duration: 0.5, ease: "circOut" }}
-                className="w-full max-w-3xl mx-auto"
-              >
-                <div className="text-center mb-12">
-                  <h2 className="font-serif text-4xl md:text-5xl font-light mb-4 text-foreground">Choose Your Path</h2>
-                  <p className="text-lg text-muted-foreground font-light">Select the lens through which you want to view the future.</p>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <button
-                    onClick={() => setMode("career")}
-                    className={cn(
-                      "group relative p-8 rounded-2xl border transition-all duration-300 text-left overflow-hidden",
-                      mode === "career"
-                        ? "bg-primary/10 border-primary/50 shadow-[0_0_30px_rgba(59,130,246,0.2)]"
-                        : "bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20"
-                    )}
+        <Card className="bg-background/80 backdrop-blur-md border-primary/10 shadow-xl">
+          {step === 1 && (
+            <>
+              <CardHeader>
+                <CardTitle className="font-serif">Choose Your Focus</CardTitle>
+                <CardDescription>Select how you want to use Future Proofer</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ModeSelector selected={mode} onSelect={setMode} />
+                <div className="flex justify-end mt-6">
+                  <Button
+                    onClick={() => setStep(2)}
+                    disabled={!mode}
+                    data-testid="button-next-step"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    <div className="relative z-10">
-                      <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center mb-6 shadow-lg">
-                        <TrendingUp className="h-6 w-6 text-white" />
-                      </div>
-                      <h3 className="text-2xl font-serif mb-2">Career Mode</h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        Personalized trajectory forecasts, skill gap analysis, and job market foresight.
-                      </p>
-                    </div>
-                    {mode === "career" && (
-                      <motion.div layoutId="check" className="absolute top-4 right-4">
-                        <div className="h-6 w-6 rounded-full bg-primary flex items-center justify-center">
-                          <Check className="h-3 w-3 text-white" />
-                        </div>
-                      </motion.div>
-                    )}
-                  </button>
-
-                  <button
-                    onClick={() => setMode("business")}
-                    className={cn(
-                      "group relative p-8 rounded-2xl border transition-all duration-300 text-left overflow-hidden",
-                      mode === "business"
-                        ? "bg-primary/10 border-primary/50 shadow-[0_0_30px_rgba(59,130,246,0.2)]"
-                        : "bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20"
-                    )}
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    <div className="relative z-10">
-                      <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center mb-6 shadow-lg">
-                        <Briefcase className="h-6 w-6 text-white" />
-                      </div>
-                      <h3 className="text-2xl font-serif mb-2">Business Mode</h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        Market trend analysis, competitive intelligence, and strategic growth opportunities.
-                      </p>
-                    </div>
-                    {mode === "business" && (
-                      <motion.div layoutId="check" className="absolute top-4 right-4">
-                        <div className="h-6 w-6 rounded-full bg-primary flex items-center justify-center">
-                          <Check className="h-3 w-3 text-white" />
-                        </div>
-                      </motion.div>
-                    )}
-                  </button>
+                    Continue
+                  </Button>
                 </div>
-              </motion.div>
-            )}
+              </CardContent>
+            </>
+          )}
 
-            {/* Step 2: Personal Info */}
-            {step === 2 && (
-              <motion.div
-                key="step2"
-                custom={2}
-                variants={variants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ duration: 0.5, ease: "circOut" }}
-                className="w-full max-w-2xl mx-auto"
-              >
-                <div className="text-center mb-12">
-                  <h2 className="font-serif text-4xl font-light mb-4">Identity Calibration</h2>
-                  <p className="text-lg text-muted-foreground font-light">Establish your baseline for accurate predictions.</p>
-                </div>
-
-                <div className="space-y-8">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="group">
-                      <Label htmlFor="fullname" className="text-xs uppercase tracking-widest text-muted-foreground mb-2 block">Full Name</Label>
-                      <Input
-                        id="fullname"
-                        value={fullName}
-                        onChange={(e) => setFullName(e.target.value)}
-                        className="border-0 border-b border-white/20 bg-transparent rounded-none px-0 py-2 h-auto text-lg focus-visible:ring-0 focus-visible:border-primary transition-colors placeholder:text-white/10"
-                        placeholder="e.g. Alex Chen"
-                      />
-                    </div>
-                    <div className="group">
-                      <Label htmlFor="email" className="text-xs uppercase tracking-widest text-muted-foreground mb-2 block">Email Address</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="border-0 border-b border-white/20 bg-transparent rounded-none px-0 py-2 h-auto text-lg focus-visible:ring-0 focus-visible:border-primary transition-colors placeholder:text-white/10"
-                        placeholder="alex@example.com"
-                      />
-                    </div>
+          {step === 2 && (
+            <>
+              <CardHeader>
+                <CardTitle className="font-serif">Tell Us About Yourself</CardTitle>
+                <CardDescription>Help us personalize your experience</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="fullname">Full Name</Label>
+                    <Input
+                      id="fullname"
+                      placeholder="John Doe"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      data-testid="input-fullname"
+                      className="bg-background/50"
+                    />
                   </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="group relative">
-                      <Label htmlFor="location" className="text-xs uppercase tracking-widest text-muted-foreground mb-2 block">Location</Label>
-                      <div className="relative">
-                        <Input
-                          id="location"
-                          value={locationInput}
-                          onChange={(e) => setLocationInput(e.target.value)}
-                          className="border-0 border-b border-white/20 bg-transparent rounded-none px-0 py-2 h-auto text-lg focus-visible:ring-0 focus-visible:border-primary transition-colors placeholder:text-white/10 pl-8"
-                          placeholder="New York, NY"
-                        />
-                        <MapPin className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/50" />
-                      </div>
-                    </div>
-                    <div className="group relative">
-                      <Label htmlFor="industry" className="text-xs uppercase tracking-widest text-muted-foreground mb-2 block">Industry</Label>
-                      <div className="relative">
-                        <Input
-                          id="industry"
-                          value={industry}
-                          onChange={(e) => setIndustry(e.target.value)}
-                          className="border-0 border-b border-white/20 bg-transparent rounded-none px-0 py-2 h-auto text-lg focus-visible:ring-0 focus-visible:border-primary transition-colors placeholder:text-white/10 pl-8"
-                          placeholder="Technology"
-                        />
-                        <Building2 className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/50" />
-                      </div>
-                    </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="john@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      data-testid="input-email"
+                      className="bg-background/50"
+                    />
                   </div>
-                </div>
-              </motion.div>
-            )}
-
-            {/* Step 3: Skills */}
-            {step === 3 && (
-              <motion.div
-                key="step3"
-                custom={3}
-                variants={variants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ duration: 0.5, ease: "circOut" }}
-                className="w-full max-w-3xl mx-auto"
-              >
-                <div className="text-center mb-12">
-                  <h2 className="font-serif text-4xl font-light mb-4">Capability Matrix</h2>
-                  <p className="text-lg text-muted-foreground font-light">Map your current skill set to the future.</p>
-                </div>
-
-                <div className="space-y-10">
-                  <div>
-                    <Label className="text-xs uppercase tracking-widest text-muted-foreground mb-4 block">Select Core Competencies</Label>
-                    <div className="flex flex-wrap gap-3">
-                      {skills.map((skill) => (
-                        <motion.button
-                          key={skill}
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          onClick={() => handleSkillToggle(skill)}
-                          className={cn(
-                            "px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border backdrop-blur-sm",
-                            selectedSkills.includes(skill)
-                              ? "bg-primary text-primary-foreground border-primary shadow-[0_0_15px_rgba(59,130,246,0.4)]"
-                              : "bg-white/5 border-white/10 text-muted-foreground hover:border-white/30 hover:bg-white/10"
-                          )}
-                        >
-                          {skill}
-                        </motion.button>
-                      ))}
-                    </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="location">Location</Label>
+                    <Input
+                      id="location"
+                      placeholder="Enter your location"
+                      value={location}
+                      onChange={(e) => setLocationInput(e.target.value)}
+                      data-testid="input-location"
+                      className="bg-background/50"
+                    />
                   </div>
-
-                  <div>
-                    <Label htmlFor="goals" className="text-xs uppercase tracking-widest text-muted-foreground mb-4 block">Strategic Objectives (Optional)</Label>
-                    <Textarea
-                      id="goals"
-                      value={goals}
-                      onChange={(e) => setGoals(e.target.value)}
-                      className="min-h-[120px] bg-white/5 border-white/10 rounded-xl focus-visible:ring-1 focus-visible:ring-primary/50 focus-visible:border-primary/50 resize-none text-lg font-light placeholder:text-white/10"
-                      placeholder="I want to transition into AI leadership within 2 years..."
+                  <div className="space-y-2">
+                    <Label htmlFor="industry">Industry</Label>
+                    <Input
+                      id="industry"
+                      placeholder="Technology"
+                      value={industry}
+                      onChange={(e) => setIndustry(e.target.value)}
+                      data-testid="input-industry"
+                      className="bg-background/50"
                     />
                   </div>
                 </div>
-              </motion.div>
-            )}
-
-            {/* Step 4: Completion */}
-            {step === 4 && (
-              <motion.div
-                key="step4"
-                custom={4}
-                variants={variants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ duration: 0.5, ease: "circOut" }}
-                className="w-full max-w-2xl mx-auto text-center"
-              >
-                <div className="mb-8 relative inline-block">
-                  <div className="absolute inset-0 bg-primary/30 blur-3xl rounded-full animate-pulse" />
-                  <motion.div
-                    initial={{ scale: 0, rotate: -180 }}
-                    animate={{ scale: 1, rotate: 0 }}
-                    transition={{ type: "spring", stiffness: 200, damping: 20 }}
-                    className="relative h-24 w-24 bg-gradient-to-br from-primary to-blue-600 rounded-full flex items-center justify-center shadow-2xl mx-auto"
-                  >
-                    <Sparkles className="h-10 w-10 text-white" />
-                  </motion.div>
+                <div className="flex justify-between mt-6">
+                  <Button variant="outline" onClick={() => setStep(1)} data-testid="button-back">
+                    Back
+                  </Button>
+                  <Button onClick={() => setStep(3)} data-testid="button-next-step">
+                    Continue
+                  </Button>
                 </div>
-
-                <h2 className="font-serif text-4xl md:text-5xl font-light mb-6">System Optimized</h2>
-                <p className="text-lg text-muted-foreground font-light mb-10 max-w-lg mx-auto leading-relaxed">
-                  We've analyzed your profile against 15+ million data points. Your personalized foresight engine is ready to launch.
-                </p>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12 text-left">
-                  <div className="p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
-                    <div className="h-1 w-8 bg-primary rounded-full mb-3" />
-                    <p className="text-sm font-medium text-foreground">Skills Mapped</p>
-                    <p className="text-xs text-muted-foreground">{selectedSkills.length} Core Competencies</p>
-                  </div>
-                  <div className="p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
-                    <div className="h-1 w-8 bg-primary rounded-full mb-3" />
-                    <p className="text-sm font-medium text-foreground">Market Data</p>
-                    <p className="text-xs text-muted-foreground">Synced & Analyzed</p>
-                  </div>
-                  <div className="p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
-                    <div className="h-1 w-8 bg-primary rounded-full mb-3" />
-                    <p className="text-sm font-medium text-foreground">Learning Path</p>
-                    <p className="text-xs text-muted-foreground">Generated</p>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-
-          </AnimatePresence>
-        </div>
-
-        {/* Footer / Navigation */}
-        <div className="p-8 border-t border-white/5 flex justify-between items-center bg-white/5 backdrop-blur-3xl">
-          {step > 1 ? (
-            <Button
-              variant="ghost"
-              onClick={prevStep}
-              className="text-muted-foreground hover:text-foreground hover:bg-white/5 gap-2 pl-2"
-            >
-              <ArrowLeft className="h-4 w-4" /> Back
-            </Button>
-          ) : (
-            <div /> // Spacer
+              </CardContent>
+            </>
           )}
 
-          {step < 4 ? (
-            <Button
-              onClick={nextStep}
-              disabled={step === 1 && !mode}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/20 px-8 py-6 rounded-full text-lg font-light tracking-wide transition-all hover:scale-105"
-            >
-              Continue <ChevronRight className="h-5 w-5 ml-2" />
-            </Button>
-          ) : (
-            <Button
-              onClick={handleGetStarted}
-              className="bg-white text-black hover:bg-white/90 shadow-[0_0_20px_rgba(255,255,255,0.3)] px-10 py-6 rounded-full text-lg font-medium tracking-wide transition-all hover:scale-105"
-            >
-              Enter Dashboard
-            </Button>
+          {step === 3 && (
+            <>
+              <CardHeader>
+                <CardTitle className="font-serif">Your Skills & Interests</CardTitle>
+                <CardDescription>Select your current skills or areas of interest</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="flex flex-wrap gap-2">
+                  {skills.map((skill) => (
+                    <Badge
+                      key={skill}
+                      variant={selectedSkills.includes(skill) ? "default" : "outline"}
+                      className="cursor-pointer px-4 py-2 text-sm hover-elevate active-elevate-2 transition-all"
+                      onClick={() => handleSkillToggle(skill)}
+                      data-testid={`badge-skill-${skill.toLowerCase().replace(/\s+/g, '-')}`}
+                    >
+                      {skill}
+                    </Badge>
+                  ))}
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="goals">Your Goals (Optional)</Label>
+                  <Textarea
+                    id="goals"
+                    placeholder="Tell us about your career or business goals..."
+                    className="min-h-[100px] bg-background/50"
+                    value={goals}
+                    onChange={(e) => setGoals(e.target.value)}
+                    data-testid="textarea-goals"
+                  />
+                </div>
+                <div className="flex justify-between">
+                  <Button variant="outline" onClick={() => setStep(2)} data-testid="button-back">
+                    Back
+                  </Button>
+                  <Button onClick={() => setStep(4)} data-testid="button-next-step">
+                    Continue
+                  </Button>
+                </div>
+              </CardContent>
+            </>
           )}
-        </div>
-      </motion.div>
+
+          {step === 4 && (
+            <>
+              <CardHeader>
+                <CardTitle className="font-serif">All Set!</CardTitle>
+                <CardDescription>Your personalized dashboard is ready</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="bg-gradient-to-br from-primary/10 to-accent/10 rounded-lg p-6 border border-primary/20 backdrop-blur-sm">
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className="p-3 bg-primary rounded-lg shadow-lg shadow-primary/20">
+                      <svg className="h-6 w-6 text-primary-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-1">Your AI Profile is Ready</h3>
+                      <p className="text-sm text-muted-foreground">
+                        We've analyzed your profile and prepared personalized insights based on West African market trends.
+                      </p>
+                    </div>
+                  </div>
+                  <ul className="space-y-2 text-sm">
+                    <li className="flex items-center gap-2">
+                      <div className="h-1.5 w-1.5 rounded-full bg-primary" />
+                      <span>{selectedSkills.length} skills identified for growth tracking</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <div className="h-1.5 w-1.5 rounded-full bg-primary" />
+                      <span>15+ AI-generated insights ready for you</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <div className="h-1.5 w-1.5 rounded-full bg-primary" />
+                      <span>Personalized learning path created</span>
+                    </li>
+                  </ul>
+                </div>
+                <div className="flex justify-between">
+                  <Button variant="outline" onClick={() => setStep(3)} data-testid="button-back">
+                    Back
+                  </Button>
+                  <Button onClick={handleGetStarted} data-testid="button-get-started" className="shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all">
+                    Get Started
+                  </Button>
+                </div>
+              </CardContent>
+            </>
+          )}
+        </Card>
+      </div>
     </div>
   );
 }
