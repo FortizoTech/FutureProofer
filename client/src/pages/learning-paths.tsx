@@ -3,73 +3,51 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { BookOpen, Target, Award, Clock, CheckCircle2, Lock, Sparkles } from "lucide-react";
-import { CourseCard } from "@/components/course-card";
-import AuthLayout from "@/components/auth-layout";
+import { useUser } from "@/context/user-context";
+
+import { COURSES_DATA } from "@/lib/mock-db";
 
 export default function LearningPaths() {
+  const { user } = useUser();
+  const career = user.selectedCareer || "General Business";
+
+  interface Course {
+    id: number;
+    title: string;
+    progress: number;
+    completed: boolean;
+    current: boolean;
+    locked: boolean;
+    duration: string;
+    difficulty: string;
+    category: string;
+  }
+
+  interface PathData {
+    title: string;
+    description: string;
+    totalCourses: number;
+    completedCourses: number;
+    estimatedTime: string;
+    level: string;
+    skills: string[];
+    courses: Course[];
+  }
+
+  // Get path data based on career, fallback to General Business if not found
+  const activePathData = (COURSES_DATA[career as keyof typeof COURSES_DATA] || COURSES_DATA["General Business"]) as PathData;
+
   const activePath = {
-    title: "Data Science Mastery Track",
-    description: "Complete learning journey from beginner to advanced data scientist",
-    totalCourses: 8,
-    completedCourses: 3,
-    estimatedTime: "6 months",
-    skillsGained: ["Python", "Statistics", "Machine Learning", "Data Visualization", "Deep Learning"],
-    level: "Beginner to Advanced",
+    title: activePathData.title,
+    description: activePathData.description,
+    totalCourses: activePathData.totalCourses,
+    completedCourses: activePathData.completedCourses,
+    estimatedTime: activePathData.estimatedTime,
+    skillsGained: activePathData.skills,
+    level: activePathData.level,
   };
 
-  const pathCourses = [
-    {
-      title: "Python Fundamentals",
-      duration: "4 weeks",
-      difficulty: "beginner" as const,
-      category: "Programming",
-      completed: true,
-      progress: 100,
-    },
-    {
-      title: "Data Analysis with Pandas",
-      duration: "3 weeks",
-      difficulty: "beginner" as const,
-      category: "Data Science",
-      completed: true,
-      progress: 100,
-    },
-    {
-      title: "Statistics for Data Science",
-      duration: "4 weeks",
-      difficulty: "intermediate" as const,
-      category: "Mathematics",
-      completed: true,
-      progress: 100,
-    },
-    {
-      title: "Machine Learning Basics",
-      duration: "6 weeks",
-      difficulty: "intermediate" as const,
-      category: "Data Science",
-      completed: false,
-      progress: 45,
-      current: true,
-    },
-    {
-      title: "Deep Learning Fundamentals",
-      duration: "8 weeks",
-      difficulty: "advanced" as const,
-      category: "AI",
-      completed: false,
-      progress: 0,
-      locked: false,
-    },
-    {
-      title: "Natural Language Processing",
-      duration: "6 weeks",
-      difficulty: "advanced" as const,
-      category: "AI",
-      completed: false,
-      progress: 0,
-      locked: true,
-    },
-  ];
+  const pathCourses = activePathData.courses;
 
   const recommendedPaths = [
     {
@@ -101,7 +79,6 @@ export default function LearningPaths() {
   const progressPercentage = (activePath.completedCourses / activePath.totalCourses) * 100;
 
   return (
-    <AuthLayout>
     <div className="space-y-8">
       <div>
         <h1 className="font-serif text-3xl font-bold mb-2" data-testid="text-page-title">Learning Paths</h1>
@@ -126,13 +103,13 @@ export default function LearningPaths() {
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-primary/10 rounded-md">
                 <BookOpen className="h-4 w-4 text-primary" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Total Courses</p>
+                <p className="text-xs md:text-sm text-muted-foreground">Total Courses</p>
                 <p className="font-semibold">{activePath.totalCourses}</p>
               </div>
             </div>
@@ -141,7 +118,7 @@ export default function LearningPaths() {
                 <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-400" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Completed</p>
+                <p className="text-xs md:text-sm text-muted-foreground">Completed</p>
                 <p className="font-semibold">{activePath.completedCourses}</p>
               </div>
             </div>
@@ -150,7 +127,7 @@ export default function LearningPaths() {
                 <Clock className="h-4 w-4 text-amber-600 dark:text-amber-400" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Est. Time</p>
+                <p className="text-xs md:text-sm text-muted-foreground">Est. Time</p>
                 <p className="font-semibold">{activePath.estimatedTime}</p>
               </div>
             </div>
@@ -159,7 +136,7 @@ export default function LearningPaths() {
                 <Target className="h-4 w-4 text-purple-600 dark:text-purple-400" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Level</p>
+                <p className="text-xs md:text-sm text-muted-foreground">Level</p>
                 <p className="font-semibold text-sm">{activePath.level}</p>
               </div>
             </div>
@@ -192,86 +169,89 @@ export default function LearningPaths() {
       {/* Course Progression */}
       <div>
         <h2 className="font-serif text-2xl font-semibold mb-6">Your Learning Journey</h2>
-        <div className="space-y-4">
+        <div className="space-y-8 relative">
+          {/* Connector Line */}
+          <div className="absolute left-9 top-6 bottom-6 w-0.5 bg-border -z-10 md:left-9" />
+
           {pathCourses.map((course, idx) => (
             <Card
               key={idx}
-              className={`${
-                course.current ? "border-primary/50 bg-primary/5" : ""
-              } ${course.locked ? "opacity-60" : ""}`}
+              className={`${course.current ? "border-primary/50 bg-primary/5" : ""
+                } ${course.locked ? "opacity-60" : ""} relative`}
               data-testid={`card-path-course-${idx}`}
             >
-              <CardContent className="p-6">
-                <div className="flex items-start gap-4">
-                  <div className={`p-3 rounded-lg shrink-0 ${
-                    course.completed ? "bg-green-500/10" :
+              <CardContent className="p-4 md:p-6">
+                <div className="flex items-start gap-3 md:gap-4">
+                  <div className={`p-2 md:p-3 rounded-lg shrink-0 z-10 ${course.completed ? "bg-green-500/10" :
                     course.current ? "bg-primary/10" :
-                    course.locked ? "bg-muted" :
-                    "bg-muted"
-                  }`}>
+                      course.locked ? "bg-muted" :
+                        "bg-muted"
+                    }`}>
                     {course.completed ? (
-                      <CheckCircle2 className="h-6 w-6 text-green-600 dark:text-green-400" />
+                      <CheckCircle2 className="h-5 w-5 md:h-6 md:w-6 text-green-600 dark:text-green-400" />
                     ) : course.locked ? (
-                      <Lock className="h-6 w-6 text-muted-foreground" />
+                      <Lock className="h-5 w-5 md:h-6 md:w-6 text-muted-foreground" />
                     ) : (
-                      <div className="h-6 w-6 flex items-center justify-center rounded-full border-2 border-primary text-primary font-semibold">
+                      <div className="h-5 w-5 md:h-6 md:w-6 flex items-center justify-center rounded-full border-2 border-primary text-primary font-semibold text-xs md:text-sm">
                         {idx + 1}
                       </div>
                     )}
                   </div>
 
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <h3 className="font-serif font-semibold text-lg">{course.title}</h3>
-                      {course.current && <Badge>In Progress</Badge>}
-                      {course.completed && <Badge variant="secondary" className="bg-green-500/10 text-green-700 dark:text-green-400">Completed</Badge>}
-                      {course.locked && <Badge variant="outline">Locked</Badge>}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-2 mb-2">
+                      <h3 className="font-serif font-semibold text-base md:text-lg truncate">{course.title}</h3>
+                      <div className="flex gap-2">
+                        {course.current && <Badge className="text-[10px] px-1.5 h-5">In Progress</Badge>}
+                        {course.completed && <Badge variant="secondary" className="bg-green-500/10 text-green-700 dark:text-green-400 text-[10px] px-1.5 h-5">Completed</Badge>}
+                        {course.locked && <Badge variant="outline" className="text-[10px] px-1.5 h-5">Locked</Badge>}
+                      </div>
                     </div>
 
-                    <div className="flex items-center gap-6 text-sm text-muted-foreground mb-4">
+                    <div className="flex items-center gap-4 text-xs md:text-sm text-muted-foreground mb-3">
                       <div className="flex items-center gap-1">
                         <Clock className="h-3 w-3" />
                         <span>{course.duration}</span>
                       </div>
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1 hidden sm:flex">
                         <Target className="h-3 w-3" />
                         <span className="capitalize">{course.difficulty}</span>
                       </div>
-                      <Badge variant="outline" className="text-xs">{course.category}</Badge>
+                      <Badge variant="outline" className="text-[10px] h-5 px-1.5">{course.category}</Badge>
                     </div>
 
                     {!course.completed && !course.locked && (
-                      <div className="space-y-2 mb-4">
-                        <div className="flex justify-between text-sm">
+                      <div className="space-y-1.5 mb-3">
+                        <div className="flex justify-between text-xs">
                           <span className="text-muted-foreground">Progress</span>
                           <span className="font-medium">{course.progress}%</span>
                         </div>
-                        <Progress value={course.progress} className="h-2" />
+                        <Progress value={course.progress} className="h-1.5" />
                       </div>
                     )}
 
                     {course.locked && (
-                      <p className="text-sm text-muted-foreground mb-4">
+                      <p className="text-xs text-muted-foreground mb-3 hidden sm:block">
                         Complete previous courses to unlock this module
                       </p>
                     )}
                   </div>
 
-                  <div className="shrink-0">
+                  <div className="shrink-0 self-center">
                     {course.completed ? (
-                      <Button variant="outline" size="sm" data-testid="button-review-course">
+                      <Button variant="outline" size="sm" className="h-8 text-xs" data-testid="button-review-course">
                         Review
                       </Button>
                     ) : course.current ? (
-                      <Button size="sm" data-testid="button-continue-course">
+                      <Button size="sm" className="h-8 text-xs" data-testid="button-continue-course">
                         Continue
                       </Button>
                     ) : course.locked ? (
-                      <Button variant="outline" size="sm" disabled data-testid="button-locked-course">
+                      <Button variant="outline" size="sm" className="h-8 text-xs" disabled data-testid="button-locked-course">
                         Locked
                       </Button>
                     ) : (
-                      <Button variant="outline" size="sm" data-testid="button-start-course">
+                      <Button variant="outline" size="sm" className="h-8 text-xs" data-testid="button-start-course">
                         Start
                       </Button>
                     )}
@@ -287,49 +267,50 @@ export default function LearningPaths() {
       <div>
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="font-serif text-2xl font-semibold">Recommended Learning Paths</h2>
+            <h2 className="font-serif text-xl md:text-2xl font-semibold">Recommended Learning Paths</h2>
             <p className="text-muted-foreground text-sm">Based on your interests and career goals</p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="flex overflow-x-auto snap-x no-scrollbar gap-4 pb-4 md:grid md:grid-cols-3 md:gap-6 md:pb-0">
           {recommendedPaths.map((path, idx) => (
-            <Card key={idx} className="hover-elevate active-elevate-2 transition-all" data-testid={`card-recommended-path-${idx}`}>
-              <CardHeader>
-                <div className="flex items-start justify-between gap-2 mb-2">
-                  <CardTitle className="font-serif text-lg">{path.title}</CardTitle>
-                  {path.popular && (
-                    <Badge variant="secondary" className="bg-accent/10 text-accent-foreground shrink-0">
-                      Popular
-                    </Badge>
-                  )}
-                </div>
-                <CardDescription>{path.description}</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-3 text-sm">
-                  <div>
-                    <p className="text-muted-foreground">Courses</p>
-                    <p className="font-semibold">{path.courses}</p>
+            <div key={idx} className="min-w-[85%] sm:min-w-[350px] snap-center md:min-w-0">
+              <Card className="hover-elevate active-elevate-2 transition-all h-full" data-testid={`card-recommended-path-${idx}`}>
+                <CardHeader>
+                  <div className="flex items-start justify-between gap-2 mb-2">
+                    <CardTitle className="font-serif text-lg">{path.title}</CardTitle>
+                    {path.popular && (
+                      <Badge variant="secondary" className="bg-accent/10 text-accent-foreground shrink-0">
+                        Popular
+                      </Badge>
+                    )}
+                  </div>
+                  <CardDescription className="line-clamp-2">{path.description}</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 gap-3 text-sm">
+                    <div>
+                      <p className="text-muted-foreground">Courses</p>
+                      <p className="font-semibold">{path.courses}</p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground">Duration</p>
+                      <p className="font-semibold">{path.duration}</p>
+                    </div>
                   </div>
                   <div>
-                    <p className="text-muted-foreground">Duration</p>
-                    <p className="font-semibold">{path.duration}</p>
+                    <p className="text-sm text-muted-foreground mb-1">Level</p>
+                    <Badge variant="outline">{path.level}</Badge>
                   </div>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">Level</p>
-                  <Badge variant="outline">{path.level}</Badge>
-                </div>
-                <Button className="w-full" variant="outline" data-testid="button-view-path">
-                  View Path Details
-                </Button>
-              </CardContent>
-            </Card>
+                  <Button className="w-full" variant="outline" data-testid="button-view-path">
+                    View Path Details
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
           ))}
         </div>
       </div>
     </div>
-    </AuthLayout>
   );
 }

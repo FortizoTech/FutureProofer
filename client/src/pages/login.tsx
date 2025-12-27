@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useLocation } from "wouter";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, X } from "lucide-react";
 import logoUrl from "@assets/Future_Proofer_Logo-ig-square-1080-1080-removebg-preview_1762643734864.png";
 
 export default function Login() {
@@ -115,12 +115,20 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 flex items-center justify-center p-6">
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-md relative">
+        <button
+          onClick={() => setLocation('/')}
+          className="absolute -top-12 right-0 p-2 rounded-full hover:bg-muted transition-colors"
+          aria-label="Close"
+          data-testid="button-exit"
+        >
+          <X className="h-5 w-5" />
+        </button>
         <div className="text-center mb-8">
-          <img 
-            src={logoUrl} 
-            alt="Future Proofer" 
-            className="h-16 mx-auto mb-4 cursor-pointer" 
+          <img
+            src={logoUrl}
+            alt="Future Proofer"
+            className="h-16 mx-auto mb-4 cursor-pointer"
             onClick={() => setLocation('/')}
           />
           <h1 className="font-serif text-3xl font-bold mb-2">Welcome Back</h1>
@@ -155,8 +163,8 @@ export default function Login() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <Label htmlFor="password">Password</Label>
-                  <a 
-                    href="#" 
+                  <a
+                    href="#"
                     className="text-sm text-primary hover:underline"
                     onClick={(e) => {
                       e.preventDefault();

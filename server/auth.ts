@@ -1,26 +1,42 @@
 import { Router } from 'express';
-
-// MOCK AUTH ROUTER
-// This replaces real database, hashing, JWT, and Google OAuth with a simple in-memory check.
-// Accepted credentials:
-//   email:    alfred@fortizotechnologies.com
-//   password: fortizo123
-// All other routes return deterministic mock responses. No environment variables required.
+import { OAuth2Client } from 'google-auth-library';
+import jwt from 'jsonwebtoken';
 
 const authRouter = Router();
 
+// Initialize Google OAuth client
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+// JWT secret - in production, use a strong secret from environment variables
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+
+// Mock user database (replace with real database in production)
+const users = new Map();
+
+// Mock user for testing
 const MOCK_USER = {
   id: 'mock-user-1',
   email: 'alfred@fortizotechnologies.com',
   fullName: 'Alfred (Mock)',
   mode: 'career',
-  // Any additional fields expected by the client can be added here
 };
+users.set(MOCK_USER.email, { ...MOCK_USER, password: 'fortizo123' });
 
-// Health of mock (optional visibility)
-console.log('Auth running in MOCK mode. Using fixed credentials for login.');
+// Helper function to generate JWT token
+function generateToken(user: any) {
+  return jwt.sign(
+    {
+      id: user.id,
+      email: user.email,
+      fullName: user.fullName,
+      mode: user.mode
+    },
+    JWT_SECRET,
+    { expiresIn: '7d' }
+  );
+}
 
-// Mock signup: simply return a created user without persistence
+// Signup endpoint
 authRouter.post('/signup', async (req, res) => {
   const { fullName, email, password } = req.body || {};
 
@@ -28,29 +44,32 @@ authRouter.post('/signup', async (req, res) => {
     return res.status(400).json({ message: 'All fields are required' });
   }
 
-  // In mock mode we "create" but do not persist. If email matches the mock, pretend it's already taken.
-  if (email === MOCK_USER.email) {
-    return res.status(409).json({ message: 'User with this email already exists (mock)' });
+  // Check if user already exists
+  if (users.has(email)) {
+    return res.status(409).json({ message: 'User with this email already exists' });
   }
 
-  const created = {
-    id: 'mock-user-new',
+  // Create new user (in production, hash the password with bcrypt)
+  const newUser = {
+    id: `user-${Date.now()}`,
     email,
     fullName,
     mode: 'career',
+    password, // In production: await bcrypt.hash(password, 10)
   };
 
-  // Return a static token-like string to satisfy clients expecting a token
-  const token = 'mock-token-' + Buffer.from(email).toString('base64');
+  users.set(email, newUser);
+
+  const token = generateToken(newUser);
 
   return res.status(201).json({
-    message: 'User created successfully (mock)',
-    user: created,
+    message: 'User created successfully',
+    user: { id: newUser.id, email: newUser.email, fullName: newUser.fullName, mode: newUser.mode },
     token,
   });
 });
 
-// Mock login: only accept the provided credentials
+// Login endpoint
 authRouter.post('/login', async (req, res) => {
   const { email, password } = req.body || {};
 
@@ -58,17 +77,68 @@ authRouter.post('/login', async (req, res) => {
     return res.status(400).json({ message: 'Email and password are required' });
   }
 
-  if (email === MOCK_USER.email && password === 'fortizo123') {
-    const token = 'mock-token-' + Buffer.from(MOCK_USER.email).toString('base64');
-    return res.status(200).json({ message: 'Login successful (mock)', user: MOCK_USER, token });
+  const user = users.get(email);
+
+  if (!user || user.password !== password) {
+    // In production: await bcrypt.compare(password, user.password)
+    return res.status(401).json({ message: 'Invalid credentials' });
   }
 
-  return res.status(401).json({ message: 'Invalid credentials (mock)' });
+  const token = generateToken(user);
+
+  return res.status(200).json({
+    message: 'Login successful',
+    user: { id: user.id, email: user.email, fullName: user.fullName, mode: user.mode },
+    token,
+  });
 });
 
-// Mock Google OAuth: disabled in mock mode
-authRouter.post('/google', async (_req, res) => {
-  return res.status(501).json({ message: 'Google OAuth disabled in mock mode' });
+// Google OAuth endpoint
+authRouter.post('/google', async (req, res) => {
+  try {
+    const { idToken } = req.body;
+
+    if (!idToken) {
+      return res.status(400).json({ message: 'ID token is required' });
+    }
+
+    // Verify the Google ID token
+    const ticket = await googleClient.verifyIdToken({
+      idToken,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+
+    if (!payload || !payload.email) {
+      return res.status(400).json({ message: 'Invalid token payload' });
+    }
+
+    // Check if user exists, if not create new user
+    let user = users.get(payload.email);
+
+    if (!user) {
+      user = {
+        id: `user-${Date.now()}`,
+        email: payload.email,
+        fullName: payload.name || 'Google User',
+        mode: 'career',
+        googleId: payload.sub,
+      };
+      users.set(payload.email, user);
+    }
+
+    const token = generateToken(user);
+
+    return res.status(200).json({
+      message: 'Google authentication successful',
+      user: { id: user.id, email: user.email, fullName: user.fullName, mode: user.mode },
+      token,
+    });
+  } catch (error) {
+    console.error('Google OAuth error:', error);
+    return res.status(401).json({ message: 'Google authentication failed' });
+  }
 });
 
 export default authRouter;

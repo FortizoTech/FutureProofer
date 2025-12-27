@@ -43,7 +43,7 @@ export default function Landing() {
     {
       name: "Amara Johnson",
       role: "Data Analyst",
-      location: "Freetown, Sierra Leone",
+      location: "",
       content: "Future Proofer helped me identify emerging skills in data science. Within 6 months, I landed my dream job with a 40% salary increase.",
     },
     {
@@ -70,14 +70,14 @@ export default function Landing() {
               <a href="#pricing" className="text-sm font-medium hover:text-primary transition-colors">Pricing</a>
             </div>
             <div className="flex items-center gap-3">
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 onClick={() => setLocation('/login')}
                 data-testid="button-login"
               >
                 Log In
               </Button>
-              <Button 
+              <Button
                 onClick={() => setLocation('/signup')}
                 data-testid="button-signup"
               >
@@ -106,8 +106,8 @@ export default function Landing() {
                 </p>
               </div>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button 
-                  size="lg" 
+                <Button
+                  size="lg"
                   className="text-lg px-8"
                   onClick={() => setLocation('/signup')}
                   data-testid="button-hero-signup"
@@ -115,9 +115,9 @@ export default function Landing() {
                   Start Free Trial
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-                <Button 
-                  size="lg" 
-                  variant="outline" 
+                <Button
+                  size="lg"
+                  variant="outline"
                   className="text-lg px-8"
                   onClick={() => setLocation('/login')}
                   data-testid="button-hero-demo"
@@ -141,9 +141,9 @@ export default function Landing() {
             </div>
             <div className="relative">
               <div className="relative z-10 rounded-2xl overflow-hidden">
-                <img 
-                  src={heroImageUrl} 
-                  alt="Professional success with Future Proofer" 
+                <img
+                  src={heroImageUrl}
+                  alt="Professional success with Future Proofer"
                   className="w-full h-auto rounded-2xl shadow-2xl"
                 />
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-6">
@@ -278,8 +278,8 @@ export default function Landing() {
         <div className="container max-w-4xl mx-auto px-6 text-center">
           <h2 className="font-serif text-4xl md:text-5xl font-bold mb-6">Ready to Future-Proof Your Career?</h2>
           <p className="text-xl mb-8 opacity-90">Join thousands of professionals and businesses across West Africa</p>
-          <Button 
-            size="lg" 
+          <Button
+            size="lg"
             variant="secondary"
             className="text-lg px-8"
             onClick={() => setLocation('/signup')}

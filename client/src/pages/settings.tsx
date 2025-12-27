@@ -11,7 +11,10 @@ import { useState } from "react";
 import { UpgradeModal } from "@/components/upgrade-modal";
 import profileImageUrl from "@assets/generated_images/Alex_David_Pratt_profile_photo_f7c30d86.png";
 
+import { useUser } from "@/context/user-context";
+
 export default function Settings() {
+  const { user } = useUser();
   const [mode, setMode] = useState<"career" | "business">("career");
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [aiRecommendations, setAiRecommendations] = useState(true);
@@ -65,7 +68,12 @@ export default function Settings() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="location">Location</Label>
-                  <Input id="location" defaultValue="Sierra Leone" data-testid="input-location" />
+                  <Input
+                    id="location"
+                    defaultValue={user.location || ""}
+                    placeholder="Enter location"
+                    data-testid="input-location"
+                  />
                 </div>
               </div>
 

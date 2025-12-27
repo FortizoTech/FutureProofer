@@ -16,7 +16,9 @@ import Settings from "@/pages/settings";
 import GrowthStrategies from "@/pages/growth-strategies";
 import SystemsThinking from "@/pages/systems-thinking";
 import Chat from "@/pages/chat";
-import Learning from "@/pages/learning";
+import Learning from "./pages/learning";
+import MasterclassPlayer from "./pages/masterclass-player";
+import Connect from "@/pages/connect";
 import AuthLayout from "@/components/auth-layout";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
@@ -33,9 +35,27 @@ export default function App() {
             <Route path="/onboarding" component={Onboarding} />
 
             {/* Authenticated routes */}
-            <Route path="/dashboard" component={Dashboard} />
-            <Route path="/insights" component={Insights} />
-            <Route path="/learning-paths" component={LearningPaths} />
+            <Route path="/dashboard">
+              {() => (
+                <AuthLayout>
+                  <Dashboard />
+                </AuthLayout>
+              )}
+            </Route>
+            <Route path="/insights">
+              {() => (
+                <AuthLayout>
+                  <Insights />
+                </AuthLayout>
+              )}
+            </Route>
+            <Route path="/learning-paths">
+              {() => (
+                <AuthLayout>
+                  <LearningPaths />
+                </AuthLayout>
+              )}
+            </Route>
 
             <Route path="/businessmate">
               {() => (
@@ -79,10 +99,25 @@ export default function App() {
                 </AuthLayout>
               )}
             </Route>
+
             <Route path="/learning">
               {() => (
                 <AuthLayout>
                   <Learning />
+                </AuthLayout>
+              )}
+            </Route>
+            <Route path="/learning/masterclass/:id">
+              {() => (
+                <AuthLayout>
+                  <MasterclassPlayer />
+                </AuthLayout>
+              )}
+            </Route>
+            <Route path="/connect">
+              {() => (
+                <AuthLayout>
+                  <Connect />
                 </AuthLayout>
               )}
             </Route>

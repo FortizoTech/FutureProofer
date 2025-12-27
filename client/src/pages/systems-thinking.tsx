@@ -3,8 +3,18 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Network, Workflow, CircuitBoard, GitBranch, Sparkles, Download, Share2 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/hooks/use-toast";
 
 export default function SystemsThinking() {
+  const { toast } = useToast();
+
+  const handleAction = (action: string, detail: string) => {
+    toast({
+      title: action,
+      description: detail,
+    });
+  };
+
   const systemMaps = [
     {
       title: "Customer Acquisition System",
@@ -109,14 +119,14 @@ export default function SystemsThinking() {
             <div className="flex-1">
               <h3 className="font-serif font-semibold text-lg mb-2">System Health Analysis</h3>
               <p className="text-sm text-muted-foreground mb-4">
-                Our AI has analyzed your business systems and identified 6 critical bottlenecks that could be limiting growth. 
+                Our AI has analyzed your business systems and identified 6 critical bottlenecks that could be limiting growth.
                 Addressing these issues could improve overall system efficiency by 45% and reduce operational costs by 30%.
               </p>
               <div className="flex gap-3">
-                <Button size="sm" data-testid="button-view-recommendations">
+                <Button size="sm" onClick={() => handleAction("Recommendations", "Showing recommendations...")} data-testid="button-view-recommendations">
                   View Recommendations
                 </Button>
-                <Button size="sm" variant="outline" data-testid="button-run-analysis">
+                <Button size="sm" variant="outline" onClick={() => handleAction("Analysis Started", "Running new system analysis...")} data-testid="button-run-analysis">
                   Run New Analysis
                 </Button>
               </div>
@@ -132,7 +142,7 @@ export default function SystemsThinking() {
             <h2 className="font-serif text-2xl font-semibold">System Maps</h2>
             <p className="text-muted-foreground text-sm">Visual representations of your business processes</p>
           </div>
-          <Button data-testid="button-create-map">
+          <Button onClick={() => handleAction("Create Map", "Opening map creator...")} data-testid="button-create-map">
             <Network className="h-4 w-4 mr-2" />
             Create New Map
           </Button>
@@ -148,10 +158,10 @@ export default function SystemsThinking() {
                     <CardDescription>{map.description}</CardDescription>
                   </div>
                   <div className="flex gap-1">
-                    <Button variant="ghost" size="icon" data-testid="button-download-map">
+                    <Button variant="ghost" size="icon" onClick={() => handleAction("Map Downloaded", "System map downloaded.")} data-testid="button-download-map">
                       <Download className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" data-testid="button-share-map">
+                    <Button variant="ghost" size="icon" onClick={() => handleAction("Share Map", "Share link copied to clipboard.")} data-testid="button-share-map">
                       <Share2 className="h-4 w-4" />
                     </Button>
                   </div>
@@ -184,7 +194,7 @@ export default function SystemsThinking() {
 
                 <div className="flex items-center justify-between pt-4 border-t border-border">
                   <span className="text-xs text-muted-foreground">Updated {map.lastUpdated}</span>
-                  <Button variant="outline" size="sm" data-testid="button-open-map">
+                  <Button variant="outline" size="sm" onClick={() => handleAction("Opening Map", "Loading system map...")} data-testid="button-open-map">
                     Open Map
                   </Button>
                 </div>
@@ -208,21 +218,20 @@ export default function SystemsThinking() {
             <Card key={idx} data-testid={`card-insight-${idx}`}>
               <CardContent className="p-6">
                 <div className="flex items-start gap-4">
-                  <div className={`p-2 rounded-md ${
-                    insight.type === "bottleneck" ? "bg-red-500/10" :
-                    insight.type === "opportunity" ? "bg-green-500/10" :
-                    "bg-amber-500/10"
-                  }`}>
+                  <div className={`p-2 rounded-md ${insight.type === "bottleneck" ? "bg-red-500/10" :
+                      insight.type === "opportunity" ? "bg-green-500/10" :
+                        "bg-amber-500/10"
+                    }`}>
                     {insight.type === "bottleneck" ? <CircuitBoard className="h-5 w-5 text-red-600 dark:text-red-400" /> :
-                     insight.type === "opportunity" ? <Sparkles className="h-5 w-5 text-green-600 dark:text-green-400" /> :
-                     <Workflow className="h-5 w-5 text-amber-600 dark:text-amber-400" />}
+                      insight.type === "opportunity" ? <Sparkles className="h-5 w-5 text-green-600 dark:text-green-400" /> :
+                        <Workflow className="h-5 w-5 text-amber-600 dark:text-amber-400" />}
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
                       <h4 className="font-semibold">{insight.title}</h4>
                       <Badge variant="outline" className={
                         insight.impact === "High" ? "bg-red-500/10 text-red-700 dark:text-red-400 border-red-500/20" :
-                        "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20"
+                          "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20"
                       }>
                         {insight.impact} Impact
                       </Badge>
@@ -236,7 +245,7 @@ export default function SystemsThinking() {
                       </div>
                     </div>
                   </div>
-                  <Button variant="outline" size="sm" data-testid="button-take-action">
+                  <Button variant="outline" size="sm" onClick={() => handleAction("Action Taken", "Initiating action plan...")} data-testid="button-take-action">
                     Take Action
                   </Button>
                 </div>

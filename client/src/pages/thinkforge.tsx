@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search, BookOpen, Award, Users, TrendingUp, Filter, Sparkles } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import { ALEX_MASTERCLASSES } from "@/lib/mock-db";
 
 export default function ThinkForge() {
   const stats = [
@@ -162,7 +163,7 @@ export default function ThinkForge() {
           <TabsTrigger value="popular" data-testid="tab-popular">Popular</TabsTrigger>
           <TabsTrigger value="new" data-testid="tab-new">New</TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="recommended" className="mt-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <CourseCard
@@ -172,6 +173,7 @@ export default function ThinkForge() {
               difficulty="beginner"
               category="Data Science"
               thumbnail="placeholder"
+              videoId={ALEX_MASTERCLASSES[0].videoId}
               onAction={() => console.log('Start course')}
             />
             <CourseCard
@@ -181,6 +183,7 @@ export default function ThinkForge() {
               difficulty="intermediate"
               category="Programming"
               thumbnail="placeholder"
+              videoId={ALEX_MASTERCLASSES[1].videoId}
               onAction={() => console.log('Start course')}
             />
             <CourseCard
@@ -190,6 +193,7 @@ export default function ThinkForge() {
               difficulty="beginner"
               category="Business"
               thumbnail="placeholder"
+              videoId={ALEX_MASTERCLASSES[2].videoId}
               onAction={() => console.log('Start course')}
             />
             <CourseCard
@@ -199,6 +203,7 @@ export default function ThinkForge() {
               difficulty="intermediate"
               category="Marketing"
               thumbnail="placeholder"
+              videoId={ALEX_MASTERCLASSES[3].videoId}
               onAction={() => console.log('Start course')}
             />
             <CourseCard
@@ -208,6 +213,7 @@ export default function ThinkForge() {
               difficulty="intermediate"
               category="Finance"
               thumbnail="placeholder"
+              videoId={ALEX_MASTERCLASSES[4].videoId}
               onAction={() => console.log('Start course')}
             />
             <CourseCard
@@ -217,6 +223,7 @@ export default function ThinkForge() {
               difficulty="advanced"
               category="Leadership"
               thumbnail="placeholder"
+              videoId={ALEX_MASTERCLASSES[0].videoId}
               onAction={() => console.log('Start course')}
             />
           </div>
@@ -233,6 +240,7 @@ export default function ThinkForge() {
               thumbnail="placeholder"
               enrolled={true}
               progress={35}
+              videoId={ALEX_MASTERCLASSES[1].videoId}
               onAction={() => console.log('Continue course')}
             />
             <CourseCard
@@ -244,6 +252,7 @@ export default function ThinkForge() {
               thumbnail="placeholder"
               enrolled={true}
               progress={68}
+              videoId={ALEX_MASTERCLASSES[2].videoId}
               onAction={() => console.log('Continue course')}
             />
             <CourseCard
@@ -255,6 +264,7 @@ export default function ThinkForge() {
               thumbnail="placeholder"
               enrolled={true}
               progress={100}
+              videoId={ALEX_MASTERCLASSES[3].videoId}
               onAction={() => console.log('Continue course')}
             />
           </div>
@@ -269,6 +279,7 @@ export default function ThinkForge() {
               difficulty="beginner"
               category="Programming"
               thumbnail="placeholder"
+              videoId={ALEX_MASTERCLASSES[4].videoId}
               onAction={() => console.log('Start course')}
             />
             <CourseCard
@@ -278,6 +289,7 @@ export default function ThinkForge() {
               difficulty="advanced"
               category="Data Science"
               thumbnail="placeholder"
+              videoId={ALEX_MASTERCLASSES[0].videoId}
               onAction={() => console.log('Start course')}
             />
             <CourseCard
@@ -287,6 +299,7 @@ export default function ThinkForge() {
               difficulty="intermediate"
               category="Business"
               thumbnail="placeholder"
+              videoId={ALEX_MASTERCLASSES[1].videoId}
               onAction={() => console.log('Start course')}
             />
           </div>
@@ -301,6 +314,7 @@ export default function ThinkForge() {
               difficulty="intermediate"
               category="Technology"
               thumbnail="placeholder"
+              videoId={ALEX_MASTERCLASSES[2].videoId}
               onAction={() => console.log('Start course')}
             />
             <CourseCard
@@ -310,6 +324,7 @@ export default function ThinkForge() {
               difficulty="beginner"
               category="Technology"
               thumbnail="placeholder"
+              videoId={ALEX_MASTERCLASSES[3].videoId}
               onAction={() => console.log('Start course')}
             />
             <CourseCard
@@ -319,6 +334,7 @@ export default function ThinkForge() {
               difficulty="intermediate"
               category="Technology"
               thumbnail="placeholder"
+              videoId={ALEX_MASTERCLASSES[4].videoId}
               onAction={() => console.log('Start course')}
             />
           </div>

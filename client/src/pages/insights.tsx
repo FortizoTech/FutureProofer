@@ -4,14 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search, Filter } from "lucide-react";
 import { useState } from "react";
-import AuthLayout from "@/components/auth-layout";
+
 
 export default function Insights() {
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
 
   return (
-    <AuthLayout>
     <div className="space-y-8">
       <div>
         <h1 className="font-serif text-3xl font-bold mb-2" data-testid="text-page-title">AI Insights</h1>
@@ -107,6 +106,5 @@ export default function Insights() {
         />
       </div>
     </div>
-    </AuthLayout>
   );
 }

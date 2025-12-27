@@ -1,0 +1,544 @@
+
+export const COURSES_DATA: Record<string, any> = {
+    'Data Science': {
+        title: 'Data Science Career Path',
+        description: 'Master the skills to become a data scientist, from Python to Machine Learning.',
+        totalCourses: 45,
+        completedCourses: 12,
+        estimatedTime: '120 hours',
+        level: 'Advanced',
+        skills: ['Python', 'Machine Learning', 'Data Analysis', 'Statistics'],
+        courses: [
+            {
+                id: 1,
+                title: 'Python for Data Science',
+                progress: 100,
+                completed: true,
+                current: false,
+                locked: false,
+                duration: '10h',
+                difficulty: 'Beginner',
+                category: 'Programming'
+            },
+            {
+                id: 2,
+                title: 'Machine Learning Basics',
+                progress: 45,
+                completed: false,
+                current: true,
+                locked: false,
+                duration: '15h',
+                difficulty: 'Intermediate',
+                category: 'AI'
+            },
+            {
+                id: 3,
+                title: 'Deep Learning Fundamentals',
+                progress: 0,
+                completed: false,
+                current: false,
+                locked: true,
+                duration: '20h',
+                difficulty: 'Advanced',
+                category: 'AI'
+            },
+            {
+                id: 4,
+                title: 'Big Data Analytics',
+                progress: 0,
+                completed: false,
+                current: false,
+                locked: true,
+                duration: '12h',
+                difficulty: 'Advanced',
+                category: 'Data'
+            }
+        ]
+    },
+    'Digital Marketing': {
+        title: 'Digital Marketing Specialist',
+        description: 'Become a digital marketing expert with skills in SEO, Social Media, and Content Strategy.',
+        totalCourses: 30,
+        completedCourses: 8,
+        estimatedTime: '80 hours',
+        level: 'Intermediate',
+        skills: ['SEO', 'Social Media', 'Content Marketing', 'Analytics'],
+        courses: [
+            {
+                id: 1,
+                title: 'SEO Mastery',
+                progress: 100,
+                completed: true,
+                current: false,
+                locked: false,
+                duration: '8h',
+                difficulty: 'Intermediate',
+                category: 'Marketing'
+            },
+            {
+                id: 2,
+                title: 'Social Media Marketing',
+                progress: 60,
+                completed: false,
+                current: true,
+                locked: false,
+                duration: '10h',
+                difficulty: 'Beginner',
+                category: 'Marketing'
+            },
+            {
+                id: 3,
+                title: 'Content Strategy',
+                progress: 0,
+                completed: false,
+                current: false,
+                locked: true,
+                duration: '12h',
+                difficulty: 'Intermediate',
+                category: 'Strategy'
+            },
+            {
+                id: 4,
+                title: 'Email Marketing',
+                progress: 0,
+                completed: false,
+                current: false,
+                locked: true,
+                duration: '6h',
+                difficulty: 'Beginner',
+                category: 'Marketing'
+            }
+        ]
+    },
+    'General Business': {
+        title: 'Business Foundations',
+        description: 'Essential business skills for the modern professional.',
+        totalCourses: 20,
+        completedCourses: 5,
+        estimatedTime: '50 hours',
+        level: 'Beginner',
+        skills: ['Communication', 'Management', 'Finance', 'Leadership'],
+        courses: [
+            {
+                id: 1,
+                title: 'Business Communication',
+                progress: 100,
+                completed: true,
+                current: false,
+                locked: false,
+                duration: '5h',
+                difficulty: 'Beginner',
+                category: 'Soft Skills'
+            },
+            {
+                id: 2,
+                title: 'Project Management',
+                progress: 30,
+                completed: false,
+                current: true,
+                locked: false,
+                duration: '15h',
+                difficulty: 'Intermediate',
+                category: 'Management'
+            },
+            {
+                id: 3,
+                title: 'Financial Literacy',
+                progress: 0,
+                completed: false,
+                current: false,
+                locked: true,
+                duration: '8h',
+                difficulty: 'Beginner',
+                category: 'Finance'
+            },
+            {
+                id: 4,
+                title: 'Leadership Essentials',
+                progress: 0,
+                completed: false,
+                current: false,
+                locked: true,
+                duration: '10h',
+                difficulty: 'Intermediate',
+                category: 'Leadership'
+            }
+        ]
+    },
+    'Web Development': {
+        title: 'Full-Stack Web Development',
+        description: 'Build modern web applications from frontend to backend.',
+        totalCourses: 40,
+        completedCourses: 0,
+        estimatedTime: '100 hours',
+        level: 'Beginner to Advanced',
+        skills: ['React', 'Node.js', 'TypeScript', 'Database Design'],
+        courses: [
+            {
+                id: 1,
+                title: 'HTML & CSS Fundamentals',
+                progress: 0,
+                completed: false,
+                current: false,
+                locked: false,
+                duration: '10h',
+                difficulty: 'Beginner',
+                category: 'Frontend'
+            },
+            {
+                id: 2,
+                title: 'JavaScript Deep Dive',
+                progress: 0,
+                completed: false,
+                current: false,
+                locked: true,
+                duration: '15h',
+                difficulty: 'Intermediate',
+                category: 'Frontend'
+            },
+            {
+                id: 3,
+                title: 'React.js Essentials',
+                progress: 0,
+                completed: false,
+                current: false,
+                locked: true,
+                duration: '20h',
+                difficulty: 'Intermediate',
+                category: 'Frontend'
+            },
+            {
+                id: 4,
+                title: 'Node.js & Express',
+                progress: 0,
+                completed: false,
+                current: false,
+                locked: true,
+                duration: '15h',
+                difficulty: 'Advanced',
+                category: 'Backend'
+            }
+        ]
+    },
+    'Project Management': {
+        title: 'Project Management Professional',
+        description: 'Lead projects to success with proven methodologies and tools.',
+        totalCourses: 25,
+        completedCourses: 0,
+        estimatedTime: '60 hours',
+        level: 'Intermediate',
+        skills: ['Agile', 'Scrum', 'Risk Management', 'Stakeholder Communication'],
+        courses: [
+            {
+                id: 1,
+                title: 'Project Management Basics',
+                progress: 0,
+                completed: false,
+                current: false,
+                locked: false,
+                duration: '8h',
+                difficulty: 'Beginner',
+                category: 'Management'
+            },
+            {
+                id: 2,
+                title: 'Agile & Scrum Methodologies',
+                progress: 0,
+                completed: false,
+                current: false,
+                locked: true,
+                duration: '12h',
+                difficulty: 'Intermediate',
+                category: 'Agile'
+            },
+            {
+                id: 3,
+                title: 'Risk Management Strategies',
+                progress: 0,
+                completed: false,
+                current: false,
+                locked: true,
+                duration: '10h',
+                difficulty: 'Advanced',
+                category: 'Strategy'
+            }
+        ]
+    },
+    'Cloud Computing': {
+        title: 'Cloud Computing Architect',
+        description: 'Design and deploy scalable cloud solutions on AWS and Azure.',
+        totalCourses: 35,
+        completedCourses: 0,
+        estimatedTime: '90 hours',
+        level: 'Advanced',
+        skills: ['AWS', 'Azure', 'DevOps', 'Cloud Security'],
+        courses: [
+            {
+                id: 1,
+                title: 'Cloud Computing Fundamentals',
+                progress: 0,
+                completed: false,
+                current: false,
+                locked: false,
+                duration: '10h',
+                difficulty: 'Beginner',
+                category: 'Cloud'
+            },
+            {
+                id: 2,
+                title: 'AWS Essentials',
+                progress: 0,
+                completed: false,
+                current: false,
+                locked: true,
+                duration: '20h',
+                difficulty: 'Intermediate',
+                category: 'AWS'
+            },
+            {
+                id: 3,
+                title: 'DevOps Practices',
+                progress: 0,
+                completed: false,
+                current: false,
+                locked: true,
+                duration: '15h',
+                difficulty: 'Advanced',
+                category: 'DevOps'
+            }
+        ]
+    },
+    'Business Analytics': {
+        title: 'Business Analytics Expert',
+        description: 'Transform data into actionable business insights.',
+        totalCourses: 28,
+        completedCourses: 0,
+        estimatedTime: '70 hours',
+        level: 'Intermediate',
+        skills: ['SQL', 'Tableau', 'Data Visualization', 'Business Intelligence'],
+        courses: [
+            {
+                id: 1,
+                title: 'Introduction to Business Analytics',
+                progress: 0,
+                completed: false,
+                current: false,
+                locked: false,
+                duration: '8h',
+                difficulty: 'Beginner',
+                category: 'Analytics'
+            },
+            {
+                id: 2,
+                title: 'SQL for Data Analysis',
+                progress: 0,
+                completed: false,
+                current: false,
+                locked: true,
+                duration: '12h',
+                difficulty: 'Intermediate',
+                category: 'Database'
+            },
+            {
+                id: 3,
+                title: 'Data Visualization with Tableau',
+                progress: 0,
+                completed: false,
+                current: false,
+                locked: true,
+                duration: '15h',
+                difficulty: 'Intermediate',
+                category: 'Visualization'
+            }
+        ]
+    }
+};
+
+export const MENTORS_DATA = [
+    {
+        id: 1,
+        name: 'Sarah Chen',
+        role: 'Senior Data Scientist',
+        company: 'TechCorp',
+        location: 'San Francisco, USA',
+        image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop',
+        expertise: ['Data Science', 'Machine Learning', 'Python'],
+        bio: '10+ years in AI and Data Science. Passionate about mentoring.'
+    },
+    {
+        id: 2,
+        name: 'Michael Ross',
+        role: 'Marketing Director',
+        company: 'GrowthInc',
+        location: 'London, UK',
+        image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop',
+        expertise: ['Digital Marketing', 'Brand Strategy', 'SEO'],
+        bio: 'Helping brands grow through storytelling and data-driven strategies.'
+    },
+    {
+        id: 3,
+        name: 'Jessica Wu',
+        role: 'Product Manager',
+        company: 'Innovate',
+        location: 'Singapore',
+        image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop',
+        expertise: ['Product Management', 'General Business', 'Agile'],
+        bio: 'Building products that users love. Expert in agile methodologies.'
+    },
+    {
+        id: 4,
+        name: 'David Kim',
+        role: 'Chief Strategy Officer',
+        company: 'FutureVision',
+        location: 'New York, USA',
+        image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop',
+        expertise: ['General Business', 'Leadership', 'Strategy'],
+        bio: 'Strategic thinker with a track record of scaling businesses.'
+    }
+];
+
+export const ALEX_MASTERCLASSES = [
+    {
+        id: "mc-1",
+        title: "Building a Global Events Empire",
+        instructor: "Alex David Pratt",
+        role: "Founder, ADP Events",
+        category: "Leadership",
+        videoId: "E4KgnTG7bLQ",
+        thumbnail: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80",
+        description: "Learn the secrets behind scaling a local events company into a global powerhouse. Alex shares his journey, mistakes, and the strategic decisions that led to international success.",
+        duration: "1h 15m",
+        chapters: [
+            { title: "Introduction: The Vision", duration: "10:00", startAt: 0 },
+            { title: "Finding Your Niche", duration: "15:30", startAt: 600 },
+            { title: "Scaling Operations", duration: "20:15", startAt: 1530 },
+            { title: "Going Global", duration: "18:45", startAt: 2745 },
+            { title: "Q&A and Closing", duration: "10:30", startAt: 3870 }
+        ]
+    },
+    {
+        id: "mc-2",
+        title: "From Ambition to Empire",
+        instructor: "Alex David Pratt",
+        role: "Serial Entrepreneur",
+        category: "Entrepreneurship",
+        videoId: "4Ff39mAmHGU",
+        thumbnail: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&q=80",
+        description: "The mindset shift required to move from small business owner to empire builder. Discover how to think bigger, act bolder, and build a legacy.",
+        duration: "55m",
+        chapters: [
+            { title: "The Empire Mindset", duration: "08:00", startAt: 0 },
+            { title: "Overcoming Limiting Beliefs", duration: "12:00", startAt: 480 },
+            { title: "Strategic Risk Taking", duration: "15:00", startAt: 1200 },
+            { title: "Building Your Inner Circle", duration: "10:00", startAt: 2100 },
+            { title: "Execution is Everything", duration: "10:00", startAt: 2700 }
+        ]
+    },
+    {
+        id: "mc-3",
+        title: "Authentic Leadership",
+        instructor: "Alex David Pratt",
+        role: "Leadership Coach",
+        category: "Strategy",
+        videoId: "2rJrMBMU1wI",
+        thumbnail: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800&q=80",
+        description: "Why authenticity is your strongest asset in high-stakes negotiations and team management. Learn to lead with empathy and strength.",
+        duration: "45m",
+        chapters: [
+            { title: "Defining Authentic Leadership", duration: "05:00", startAt: 0 },
+            { title: "Vulnerability as Strength", duration: "10:00", startAt: 300 },
+            { title: "Building Trust with Teams", duration: "12:00", startAt: 900 },
+            { title: "Navigating Conflict", duration: "10:00", startAt: 1620 },
+            { title: "Leading Through Crisis", duration: "08:00", startAt: 2220 }
+        ]
+    },
+    {
+        id: "mc-4",
+        title: "Strategic Innovation",
+        instructor: "Alex David Pratt",
+        role: "Innovation Strategist",
+        category: "Strategy",
+        videoId: "TIYQgMV0wdg",
+        thumbnail: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
+        description: "Navigating complex markets with innovative strategies. How to stay ahead of the curve and disrupt your industry before someone else does.",
+        duration: "1h 05m",
+        chapters: [
+            { title: "The Innovation Imperative", duration: "10:00", startAt: 0 },
+            { title: "Spotting Market Trends", duration: "15:00", startAt: 600 },
+            { title: "Design Thinking for Business", duration: "15:00", startAt: 1500 },
+            { title: "Prototyping Ideas", duration: "10:00", startAt: 2400 },
+            { title: "Launching New Ventures", duration: "15:00", startAt: 3000 }
+        ]
+    },
+    {
+        id: "mc-5",
+        title: "Future of Business",
+        instructor: "Alex David Pratt",
+        role: "Futurist",
+        category: "Future Trends",
+        videoId: "xQy5UxaIoU4",
+        thumbnail: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+        description: "Preparing your business for the next decade of disruption. AI, automation, and the changing landscape of work.",
+        duration: "50m",
+        chapters: [
+            { title: "The Age of AI", duration: "10:00", startAt: 0 },
+            { title: "Automation & Workforce", duration: "10:00", startAt: 600 },
+            { title: "Sustainable Business Models", duration: "10:00", startAt: 1200 },
+            { title: "The Global Economy", duration: "10:00", startAt: 1800 },
+            { title: "Preparing for 2030", duration: "10:00", startAt: 2400 }
+        ]
+    }
+];
+
+export const PEERS_DATA = [
+    {
+        id: 1,
+        name: "Kwame Mensah",
+        role: "Junior Developer",
+        company: "Freelance",
+        location: "Kumasi, Ghana",
+        interests: ["Web Development", "React", "Node.js"],
+        career: "Web Development",
+        image: ""
+    },
+    {
+        id: 2,
+        name: "Amara Diop",
+        role: "Marketing Specialist",
+        company: "Digital Agency",
+        location: "Dakar, Senegal",
+        interests: ["Digital Marketing", "SEO", "Content Strategy"],
+        career: "Digital Marketing",
+        image: ""
+    },
+    {
+        id: 3,
+        name: "Chioma Okeke",
+        role: "Data Analyst",
+        company: "FinTech Corp",
+        location: "Lagos, Nigeria",
+        interests: ["Data Science", "Python", "Tableau"],
+        career: "Data Science",
+        image: ""
+    },
+    {
+        id: 4,
+        name: "David Osei",
+        role: "Business Student",
+        company: "University of Ghana",
+        location: "Accra, Ghana",
+        interests: ["Business Analytics", "Entrepreneurship"],
+        career: "General Business",
+        image: ""
+    },
+    {
+        id: 5,
+        name: "Zainab Ahmed",
+        role: "Product Manager",
+        company: "Tech Startups",
+        location: "Nairobi, Kenya",
+        interests: ["Product Management", "Agile", "UX"],
+        career: "General Business",
+        image: ""
+    }
+];

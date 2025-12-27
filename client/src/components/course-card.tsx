@@ -11,6 +11,7 @@ interface CourseCardProps {
   difficulty: "beginner" | "intermediate" | "advanced";
   category: string;
   thumbnail?: string;
+  videoId?: string;
   progress?: number;
   enrolled?: boolean;
   onAction?: () => void;
@@ -29,13 +30,24 @@ export function CourseCard({
   difficulty,
   category,
   thumbnail,
+  videoId,
   progress,
   enrolled = false,
   onAction,
 }: CourseCardProps) {
   return (
     <Card className="overflow-hidden hover-elevate active-elevate-2 transition-all" data-testid={`card-course-${title.toLowerCase().replace(/\s+/g, '-')}`}>
-      {thumbnail && (
+      {videoId ? (
+        <div className="aspect-video w-full bg-black/5 relative">
+          <iframe
+            className="w-full h-full object-cover"
+            src={`https://www.youtube-nocookie.com/embed/${videoId}`}
+            title={title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+      ) : thumbnail && (
         <div className="aspect-video bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
           <Play className="h-12 w-12 text-primary/40" />
         </div>
@@ -72,8 +84,8 @@ export function CourseCard({
         )}
       </CardContent>
       <CardFooter>
-        <Button 
-          className="w-full" 
+        <Button
+          className="w-full"
           variant={enrolled ? "default" : "outline"}
           onClick={() => {
             console.log(enrolled ? 'Continue learning' : 'Start learning');

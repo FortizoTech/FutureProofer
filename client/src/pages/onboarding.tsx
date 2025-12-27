@@ -8,11 +8,20 @@ import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import logoUrl from "@assets/Future_Proofer_Logo-ig-square-1080-1080-removebg-preview_1762643734864.png";
+import { useLocation } from "wouter";
+import { useUser } from "@/context/user-context";
 
 export default function Onboarding() {
+  const [, setLocation] = useLocation();
+  const { updateUser } = useUser();
   const [step, setStep] = useState(1);
   const [mode, setMode] = useState<"career" | "business">();
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [location, setLocationInput] = useState("");
+  const [industry, setIndustry] = useState("");
+  const [goals, setGoals] = useState("");
 
   const skills = [
     "Data Science", "Python", "Machine Learning", "Web Development",
@@ -25,6 +34,37 @@ export default function Onboarding() {
         ? prev.filter(s => s !== skill)
         : [...prev, skill]
     );
+  };
+
+  const handleGetStarted = () => {
+    // Determine primary career based on selected skills
+    const careerMapping: Record<string, string> = {
+      "Data Science": "Data Science",
+      "Machine Learning": "Data Science",
+      "Python": "Data Science",
+      "Web Development": "Web Development",
+      "Digital Marketing": "Digital Marketing",
+      "Project Management": "Project Management",
+      "Cloud Computing": "Cloud Computing",
+      "Business Analytics": "Business Analytics"
+    };
+
+    const selectedCareer = selectedSkills.length > 0
+      ? careerMapping[selectedSkills[0]] || selectedSkills[0]
+      : "";
+
+    // Save all data to UserContext
+    updateUser({
+      fullName,
+      location,
+      selectedCareer,
+      selectedSkills,
+      userType: mode || 'career',
+      bio: goals,
+    });
+
+    // Navigate to dashboard
+    setLocation('/dashboard');
   };
 
   const progress = (step / 4) * 100;
@@ -75,19 +115,44 @@ export default function Onboarding() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="fullname">Full Name</Label>
-                    <Input id="fullname" placeholder="John Doe" data-testid="input-fullname" />
+                    <Input
+                      id="fullname"
+                      placeholder="John Doe"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      data-testid="input-fullname"
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" placeholder="john@example.com" data-testid="input-email" />
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="john@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      data-testid="input-email"
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="location">Location</Label>
-                    <Input id="location" placeholder="Sierra Leone" data-testid="input-location" />
+                    <Input
+                      id="location"
+                      placeholder="Enter your location"
+                      value={location}
+                      onChange={(e) => setLocationInput(e.target.value)}
+                      data-testid="input-location"
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="industry">Industry</Label>
-                    <Input id="industry" placeholder="Technology" data-testid="input-industry" />
+                    <Input
+                      id="industry"
+                      placeholder="Technology"
+                      value={industry}
+                      onChange={(e) => setIndustry(e.target.value)}
+                      data-testid="input-industry"
+                    />
                   </div>
                 </div>
                 <div className="flex justify-between mt-6">
@@ -128,6 +193,8 @@ export default function Onboarding() {
                     id="goals"
                     placeholder="Tell us about your career or business goals..."
                     className="min-h-[100px]"
+                    value={goals}
+                    onChange={(e) => setGoals(e.target.value)}
                     data-testid="textarea-goals"
                   />
                 </div>
@@ -183,7 +250,7 @@ export default function Onboarding() {
                   <Button variant="outline" onClick={() => setStep(3)} data-testid="button-back">
                     Back
                   </Button>
-                  <Button onClick={() => console.log('Navigate to dashboard')} data-testid="button-get-started">
+                  <Button onClick={handleGetStarted} data-testid="button-get-started">
                     Get Started
                   </Button>
                 </div>

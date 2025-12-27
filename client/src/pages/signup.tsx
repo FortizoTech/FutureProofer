@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useLocation } from "wouter";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, X } from "lucide-react";
 import logoUrl from "@assets/Future_Proofer_Logo-ig-square-1080-1080-removebg-preview_1762643734864.png";
 
 // Declare global types for Google Identity Services
@@ -131,12 +131,20 @@ export default function Signup() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 flex items-center justify-center p-6">
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-md relative">
+        <button
+          onClick={() => setLocation('/')}
+          className="absolute -top-12 right-0 p-2 rounded-full hover:bg-muted transition-colors"
+          aria-label="Close"
+          data-testid="button-exit"
+        >
+          <X className="h-5 w-5" />
+        </button>
         <div className="text-center mb-8">
-          <img 
-            src={logoUrl} 
-            alt="Future Proofer" 
-            className="h-16 mx-auto mb-4 cursor-pointer" 
+          <img
+            src={logoUrl}
+            alt="Future Proofer"
+            className="h-16 mx-auto mb-4 cursor-pointer"
             onClick={() => setLocation('/')}
           />
           <h1 className="font-serif text-3xl font-bold mb-2">Create Your Account</h1>
@@ -233,18 +241,18 @@ export default function Signup() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div id="google-signin-button"></div>
-                <Button 
-                  type="button" 
-                  variant="outline" 
+                <Button
+                  type="button"
+                  variant="outline"
                   onClick={() => console.log('Microsoft signup')}
                   data-testid="button-microsoft"
                 >
                   <svg className="h-4 w-4 mr-2" viewBox="0 0 23 23">
-                    <path fill="#f3f3f3" d="M0 0h23v23H0z"/>
-                    <path fill="#f35325" d="M1 1h10v10H1z"/>
-                    <path fill="#81bc06" d="M12 1h10v10H12z"/>
-                    <path fill="#05a6f0" d="M1 12h10v10H1z"/>
-                    <path fill="#ffba08" d="M12 12h10v10H12z"/>
+                    <path fill="#f3f3f3" d="M0 0h23v23H0z" />
+                    <path fill="#f35325" d="M1 1h10v10H1z" />
+                    <path fill="#81bc06" d="M12 1h10v10H12z" />
+                    <path fill="#05a6f0" d="M1 12h10v10H1z" />
+                    <path fill="#ffba08" d="M12 12h10v10H12z" />
                   </svg>
                   Microsoft
                 </Button>
