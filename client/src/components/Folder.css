@@ -3,6 +3,7 @@
     height: 160px;
     cursor: pointer;
     position: relative;
+    perspective: 1000px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -15,7 +16,7 @@
 }
 
 .folder.open .folder__back {
-    transform: rotateX(-30deg) translateY(-20px);
+    transform: rotateX(-25deg);
 }
 
 .folder__front {
@@ -27,6 +28,7 @@
     border-radius: 8px 8px 4px 4px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     transition: all 0.3s ease;
+    transform-style: preserve-3d;
 }
 
 .folder__front::before {
@@ -60,45 +62,51 @@
     align-items: center;
     justify-content: center;
     padding: 16px;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
     text-align: center;
     color: hsl(var(--foreground));
     overflow: hidden;
+    transform-style: preserve-3d;
+    pointer-events: none;
 }
 
 .folder:not(.open) .paper {
-    transform: translateY(0) translateZ(0);
+    transform: translateY(0) translateZ(0) rotateX(0);
     opacity: 0;
+    pointer-events: none;
 }
 
 .folder.open .paper {
     opacity: 1;
-    cursor: pointer;
+    pointer-events: auto;
 }
 
 .folder.open .paper-1 {
-    transform: translateY(-80px) translateZ(10px) translate(var(--magnet-x, 0), var(--magnet-y, 0));
+    transform: translateY(-100px) translateZ(30px) rotateX(15deg) translate(var(--magnet-x, 0), var(--magnet-y, 0));
     background: var(--paper-1);
     transition: transform 0.2s ease-out;
+    z-index: 3;
 }
 
 .folder.open .paper-2 {
-    transform: translateY(-80px) translateZ(20px) translate(var(--magnet-x, 0), var(--magnet-y, 0));
+    transform: translateY(-100px) translateZ(20px) rotateX(15deg) translate(var(--magnet-x, 0), var(--magnet-y, 0));
     background: var(--paper-2);
     transition: transform 0.2s ease-out;
+    z-index: 2;
 }
 
 .folder.open .paper-3 {
-    transform: translateY(-80px) translateZ(30px) translate(var(--magnet-x, 0), var(--magnet-y, 0));
+    transform: translateY(-100px) translateZ(10px) rotateX(15deg) translate(var(--magnet-x, 0), var(--magnet-y, 0));
     background: var(--paper-3);
     transition: transform 0.2s ease-out;
+    z-index: 1;
 }
 
-.paper:hover {
-    transform: translateY(-90px) translateZ(40px) scale(1.05) !important;
+.folder.open .paper:hover {
+    transform: translateY(-110px) translateZ(50px) rotateX(15deg) scale(1.05) translate(var(--magnet-x, 0), var(--magnet-y, 0)) !important;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-    z-index: 10;
+    z-index: 10 !important;
 }
 
 @media (max-width: 768px) {
@@ -108,7 +116,13 @@
     }
 
     .paper {
-        font-size: 12px;
-        padding: 12px;
+        font-size: 11px;
+        padding: 10px;
+    }
+
+    .folder.open .paper-1,
+    .folder.open .paper-2,
+    .folder.open .paper-3 {
+        transform: translateY(-80px) translateZ(20px) rotateX(15deg);
     }
 }
