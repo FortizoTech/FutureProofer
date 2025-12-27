@@ -3,7 +3,6 @@ import 'dotenv/config';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import express from 'express';
-import { createServer } from 'vite';
 import { readFile } from "node:fs/promises";
 import { api as apiRouter } from './routes.js'; // Make sure your build process outputs .js or resolves this
 
@@ -38,6 +37,7 @@ if (process.env.NODE_ENV !== 'production') {
   const clientRoot = path.resolve(projectRoot, 'client');
 
   async function startDevServer() {
+    const { createServer } = await import('vite');
     const vite = await createServer({
       configFile: path.resolve(projectRoot, 'vite.config.ts'),
       root: clientRoot,
