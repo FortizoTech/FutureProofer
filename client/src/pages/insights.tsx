@@ -5,10 +5,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Search, Filter } from "lucide-react";
 import { useState } from "react";
 
+import { useLocation } from "wouter";
+import { MOCK_INSIGHTS } from "@/lib/mock-db";
 
 export default function Insights() {
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
+  const [, setLocation] = useLocation();
 
   return (
     <div className="space-y-8">
@@ -49,61 +52,32 @@ export default function Insights() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <InsightCard
-          title="Data Science Demand Rising"
-          description="AI and machine learning skills are projected to grow by 45% in the next 2 years in West Africa. This represents a significant opportunity for career advancement."
-          category="Career Forecast"
-          priority="high"
-          trend="up"
-          value="45%"
-          change="+12%"
-          onClick={() => console.log('View insight details')}
-        />
-        <InsightCard
-          title="Python Skills Gap"
-          description="There's a significant shortage of Python developers in your region. Consider upskilling to take advantage of this demand."
-          category="Skill Demand"
-          priority="medium"
-          trend="up"
-          change="+8%"
-          onClick={() => console.log('View insight details')}
-        />
-        <InsightCard
-          title="Remote Work Opportunities"
-          description="International remote positions increased by 67% for your skill set, opening global opportunities."
-          category="Job Market"
-          priority="medium"
-          trend="up"
-          value="67%"
-          change="+15%"
-          onClick={() => console.log('View insight details')}
-        />
-        <InsightCard
-          title="Cloud Computing Skills"
-          description="Cloud platforms (AWS, Azure, GCP) show 89% growth in job postings across ECOWAS nations."
-          category="Skill Demand"
-          priority="high"
-          trend="up"
-          value="89%"
-          change="+22%"
-          onClick={() => console.log('View insight details')}
-        />
-        <InsightCard
-          title="Digital Marketing Expansion"
-          description="E-commerce growth driving 52% increase in digital marketing roles in West Africa."
-          category="Job Market"
-          priority="low"
-          trend="up"
-          change="+5%"
-          onClick={() => console.log('View insight details')}
-        />
-        <InsightCard
-          title="Upskilling Recommendation"
-          description="Based on your profile, we recommend focusing on data visualization and analytics tools."
-          category="Learning Path"
-          priority="medium"
-          onClick={() => console.log('View insight details')}
-        />
+        {MOCK_INSIGHTS.filter(insight => {
+          if (searchQuery && !insight.title.toLowerCase().includes(searchQuery.toLowerCase()) && !insight.description.toLowerCase().includes(searchQuery.toLowerCase())) {
+            return false;
+          }
+          // Simple category filter mapping (optional, can be improved)
+          if (categoryFilter !== "all" && !insight.category.toLowerCase().includes(categoryFilter)) {
+            // return false; // strict filtering
+            // For now, let's keep it loose or implement proper mapping if needed.
+            // Given the mock categories are "Market Strategy", "Operations", etc. and filter values are "career", "skills", "market", "learning".
+            // Let's just filter by search for now to keep it simple and robust, or do a basic check.
+            return true;
+          }
+          return true;
+        }).map((insight) => (
+          <InsightCard
+            key={insight.id}
+            title={insight.title}
+            description={insight.description}
+            category={insight.category}
+            priority={insight.impact.toLowerCase() as "high" | "medium" | "low"}
+            trend={insight.metrics[0].trend as "up" | "down" | "neutral"}
+            value={insight.metrics[0].value}
+            change={insight.metrics[0].trend === "up" ? "Positive" : "Negative"} // Simplified
+            onClick={() => setLocation(`/insights/${insight.id}`)}
+          />
+        ))}
       </div>
     </div>
   );

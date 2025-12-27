@@ -5,6 +5,7 @@ import { Target, Briefcase, TrendingUp, Users, Play, UserPlus, ArrowRight } from
 import { Button } from "@/components/ui/button";
 import { useUser } from "@/context/user-context";
 import { useLocation } from "wouter";
+import { MOCK_INSIGHTS } from "@/lib/mock-db";
 
 export default function Dashboard() {
     const { user } = useUser();
@@ -85,37 +86,53 @@ export default function Dashboard() {
                     />
                 </div>
 
-                {/* Right Column: Quick Actions - Mobile: Horizontal Swipe */}
+                {/* Right Column: Quick Actions */}
                 <div className="space-y-4 md:space-y-6">
                     <div className="bg-card rounded-xl border shadow-sm p-4 md:p-6 h-full">
                         <h3 className="font-serif text-lg font-semibold mb-4">Quick Actions</h3>
-                        <div className="flex overflow-x-auto snap-x no-scrollbar gap-3 pb-2 md:grid md:grid-cols-1 md:gap-4 md:pb-0">
-                            <Button variant="outline" className="h-auto py-4 flex-shrink-0 w-[85%] sm:w-auto snap-center flex items-center justify-start gap-4 hover:bg-primary/5 hover:border-primary/30 transition-all px-6" onClick={() => setLocation('/connect')}>
-                                <div className="p-2 bg-primary/10 rounded-full">
-                                    <UserPlus className="h-5 w-5 text-primary" />
+                        {/* Mobile: Icon Grid, Desktop: Vertical List with Labels */}
+                        <div className="grid grid-cols-3 gap-2 md:flex md:flex-col md:gap-4">
+                            <Button 
+                                variant="outline" 
+                                className="h-16 w-full flex-col gap-1 md:h-auto md:flex-row md:justify-start md:gap-4 md:px-6 md:py-4 hover:bg-primary/5 hover:border-primary/30 transition-all" 
+                                onClick={() => setLocation('/connect')}
+                            >
+                                <div className="p-2 bg-primary/10 rounded-full md:p-2">
+                                    <UserPlus className="h-4 w-4 md:h-5 md:w-5 text-primary" />
                                 </div>
-                                <div className="text-left">
+                                <div className="hidden md:block text-left">
                                     <span className="font-semibold block">Find a Mentor</span>
                                     <span className="text-xs text-muted-foreground">Connect with experts</span>
                                 </div>
+                                <span className="text-[10px] md:hidden">Mentor</span>
                             </Button>
-                            <Button variant="outline" className="h-auto py-4 flex-shrink-0 w-[85%] sm:w-auto snap-center flex items-center justify-start gap-4 hover:bg-primary/5 hover:border-primary/30 transition-all px-6" onClick={() => setLocation('/learning')}>
-                                <div className="p-2 bg-primary/10 rounded-full">
-                                    <Play className="h-5 w-5 text-primary" />
+                            <Button 
+                                variant="outline" 
+                                className="h-16 w-full flex-col gap-1 md:h-auto md:flex-row md:justify-start md:gap-4 md:px-6 md:py-4 hover:bg-primary/5 hover:border-primary/30 transition-all" 
+                                onClick={() => setLocation('/learning')}
+                            >
+                                <div className="p-2 bg-primary/10 rounded-full md:p-2">
+                                    <Play className="h-4 w-4 md:h-5 md:w-5 text-primary" />
                                 </div>
-                                <div className="text-left">
+                                <div className="hidden md:block text-left">
                                     <span className="font-semibold block">Masterclasses</span>
                                     <span className="text-xs text-muted-foreground">Watch new content</span>
                                 </div>
+                                <span className="text-[10px] md:hidden">Learn</span>
                             </Button>
-                            <Button variant="outline" className="h-auto py-4 flex-shrink-0 w-[85%] sm:w-auto snap-center flex items-center justify-start gap-4 hover:bg-primary/5 hover:border-primary/30 transition-all px-6" onClick={() => setLocation('/insights')}>
-                                <div className="p-2 bg-primary/10 rounded-full">
-                                    <TrendingUp className="h-5 w-5 text-primary" />
+                            <Button 
+                                variant="outline" 
+                                className="h-16 w-full flex-col gap-1 md:h-auto md:flex-row md:justify-start md:gap-4 md:px-6 md:py-4 hover:bg-primary/5 hover:border-primary/30 transition-all" 
+                                onClick={() => setLocation('/insights')}
+                            >
+                                <div className="p-2 bg-primary/10 rounded-full md:p-2">
+                                    <TrendingUp className="h-4 w-4 md:h-5 md:w-5 text-primary" />
                                 </div>
-                                <div className="text-left">
+                                <div className="hidden md:block text-left">
                                     <span className="font-semibold block">View Insights</span>
                                     <span className="text-xs text-muted-foreground">Check market trends</span>
                                 </div>
+                                <span className="text-[10px] md:hidden">Insights</span>
                             </Button>
                         </div>
                     </div>
@@ -133,42 +150,21 @@ export default function Dashboard() {
                         View All <ArrowRight className="h-3 w-3 ml-1" />
                     </Button>
                 </div>
-                <div className="flex overflow-x-auto snap-x no-scrollbar gap-4 pb-4 md:grid md:grid-cols-3 md:gap-6 md:pb-0">
-                    <div className="min-w-[85%] sm:min-w-[350px] snap-center">
-                        <InsightCard
-                            title="Data Science Demand Rising"
-                            description="AI and machine learning skills are projected to grow by 45% in the next 2 years in West Africa."
-                            category="Career Forecast"
-                            priority="high"
-                            trend="up"
-                            value="45%"
-                            change="+12%"
-                            onClick={() => setLocation('/insights')}
-                        />
-                    </div>
-                    <div className="min-w-[85%] sm:min-w-[350px] snap-center">
-                        <InsightCard
-                            title="Python Skills Gap"
-                            description="There's a significant shortage of Python developers in your region. Consider upskilling."
-                            category="Skill Demand"
-                            priority="medium"
-                            trend="up"
-                            change="+8%"
-                            onClick={() => setLocation('/insights')}
-                        />
-                    </div>
-                    <div className="min-w-[85%] sm:min-w-[350px] snap-center">
-                        <InsightCard
-                            title="Remote Work Opportunities"
-                            description="International remote positions increased by 67% for your skill set."
-                            category="Job Market"
-                            priority="medium"
-                            trend="up"
-                            value="67%"
-                            change="+15%"
-                            onClick={() => setLocation('/insights')}
-                        />
-                    </div>
+                <div className="flex overflow-x-auto snap-x no-scrollbar gap-4 pb-4 -mx-4 px-4 md:mx-0 md:px-0 md:grid md:grid-cols-3 md:pb-0">
+                    {MOCK_INSIGHTS.slice(0, 3).map((insight) => (
+                        <div key={insight.id} className="min-w-[85%] sm:min-w-[350px] snap-center">
+                            <InsightCard
+                                title={insight.title}
+                                description={insight.description}
+                                category={insight.category}
+                                priority={insight.impact.toLowerCase() as "high" | "medium" | "low"}
+                                trend={insight.metrics[0].trend as "up" | "down" | "neutral"}
+                                value={insight.metrics[0].value}
+                                change={insight.metrics[0].trend === "up" ? "Positive" : "Negative"}
+                                onClick={() => setLocation(`/insights/${insight.id}`)}
+                            />
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>

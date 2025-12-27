@@ -22,6 +22,7 @@ import Connect from "@/pages/connect";
 import AuthLayout from "@/components/auth-layout";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
+import InsightDetails from "@/pages/insight-details";
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -46,6 +47,13 @@ export default function App() {
               {() => (
                 <AuthLayout>
                   <Insights />
+                </AuthLayout>
+              )}
+            </Route>
+            <Route path="/insights/:id">
+              {() => (
+                <AuthLayout>
+                  <InsightDetails />
                 </AuthLayout>
               )}
             </Route>

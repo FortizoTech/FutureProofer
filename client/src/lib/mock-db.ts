@@ -542,3 +542,150 @@ export const PEERS_DATA = [
         image: ""
     }
 ];
+
+export const MOCK_INSIGHTS = [
+    {
+        id: "ins-1",
+        title: "AI-Driven Market Expansion",
+        description: "Leverage AI tools to identify and penetrate new market segments in West Africa.",
+        category: "Market Strategy",
+        impact: "High",
+        date: "Oct 24, 2024",
+        metrics: [
+            { label: "Revenue Potential", value: "+45%", trend: "up" },
+            { label: "Market Reach", value: "2.5M", trend: "up" },
+            { label: "Cost Efficiency", value: "30%", trend: "up" }
+        ],
+        content: `
+            <p>The West African market is experiencing a rapid digital transformation, presenting a unique opportunity for businesses to leverage AI for expansion. By utilizing predictive analytics and machine learning algorithms, companies can identify high-potential market segments that were previously inaccessible.</p>
+            <p>Our analysis suggests that early adopters of AI-driven market strategies in this region could see a 45% increase in revenue potential over the next 12 months. This growth is driven by a combination of increased internet penetration and a growing middle class with disposable income.</p>
+            <p>Key areas for AI application include personalized marketing, supply chain optimization, and customer service automation. Implementing these tools not only improves operational efficiency but also enhances the customer experience, leading to higher retention rates.</p>
+        `,
+        actionSteps: [
+            "Conduct a data audit to ensure readiness for AI integration.",
+            "Pilot an AI-powered customer segmentation tool.",
+            "Partner with local fintech firms for seamless payment processing."
+        ],
+        relatedIds: ["ins-3", "ins-5"]
+    },
+    {
+        id: "ins-2",
+        title: "Remote Work Optimization",
+        description: "Maximize productivity and employee satisfaction with hybrid work models.",
+        category: "Operations",
+        impact: "Medium",
+        date: "Oct 20, 2024",
+        metrics: [
+            { label: "Productivity", value: "+22%", trend: "up" },
+            { label: "Overhead Reduction", value: "15%", trend: "down" },
+            { label: "Employee Retention", value: "90%", trend: "up" }
+        ],
+        content: `
+            <p>The shift to remote and hybrid work models is no longer a temporary measure but a permanent fixture of the modern workplace. Companies that optimize their operations for this new reality are seeing significant gains in productivity and employee satisfaction.</p>
+            <p>Data indicates that a well-structured hybrid model can increase productivity by up to 22%. This is largely due to reduced commute times and the ability for employees to work in environments that suit their individual working styles.</p>
+            <p>However, success requires more than just Zoom calls. It demands a cultural shift towards outcome-based management and investment in digital collaboration tools.</p>
+        `,
+        actionSteps: [
+            "Implement a digital collaboration platform like Slack or Teams.",
+            "Train managers on outcome-based performance evaluation.",
+            "Establish clear policies for remote work hours and availability."
+        ],
+        relatedIds: ["ins-4", "ins-6"]
+    },
+    {
+        id: "ins-3",
+        title: "Sustainable Supply Chains",
+        description: "Transitioning to green logistics to meet global standards and consumer demand.",
+        category: "Sustainability",
+        impact: "High",
+        date: "Oct 18, 2024",
+        metrics: [
+            { label: "Carbon Footprint", value: "-40%", trend: "down" },
+            { label: "Brand Loyalty", value: "+35%", trend: "up" },
+            { label: "Compliance Score", value: "98/100", trend: "up" }
+        ],
+        content: `
+            <p>Sustainability is moving from a "nice-to-have" to a business imperative. Consumers, particularly Gen Z and Millennials, are increasingly making purchasing decisions based on a brand's environmental impact.</p>
+            <p>Transitioning to a sustainable supply chain can reduce your carbon footprint by up to 40% while simultaneously boosting brand loyalty. This involves sourcing materials responsibly, optimizing logistics to reduce emissions, and minimizing waste.</p>
+            <p>Furthermore, global regulations are tightening. Proactively adopting green practices ensures compliance and avoids future penalties.</p>
+        `,
+        actionSteps: [
+            "Audit current suppliers for environmental compliance.",
+            "Invest in route optimization software for logistics.",
+            "Launch a consumer-facing sustainability campaign."
+        ],
+        relatedIds: ["ins-1"]
+    },
+    {
+        id: "ins-4",
+        title: "Fintech Integration",
+        description: "Streamlining payments and financial operations with modern fintech solutions.",
+        category: "Finance",
+        impact: "High",
+        date: "Oct 15, 2024",
+        metrics: [
+            { label: "Transaction Speed", value: "Instant", trend: "up" },
+            { label: "Processing Fees", value: "-12%", trend: "down" },
+            { label: "Cash Flow", value: "Optimized", trend: "up" }
+        ],
+        content: `
+            <p>The fintech revolution is transforming how businesses handle money. From instant cross-border payments to automated invoicing, modern financial tools are removing friction from commerce.</p>
+            <p>Integrating these solutions can reduce processing fees by an average of 12% and drastically improve cash flow visibility. For businesses operating in multiple currencies, fintech platforms offer competitive exchange rates and lower hedging costs.</p>
+            <p>Security is also a major benefit, with advanced fraud detection systems protecting your assets better than traditional banking methods.</p>
+        `,
+        actionSteps: [
+            "Evaluate current payment gateways for cost and speed.",
+            "Integrate an automated invoicing system.",
+            "Explore blockchain solutions for secure cross-border transactions."
+        ],
+        relatedIds: ["ins-2", "ins-5"]
+    },
+    {
+        id: "ins-5",
+        title: "Data Privacy Compliance",
+        description: "Navigating the complex landscape of data protection laws in Africa and beyond.",
+        category: "Legal",
+        impact: "Critical",
+        date: "Oct 10, 2024",
+        metrics: [
+            { label: "Risk Reduction", value: "85%", trend: "up" },
+            { label: "Trust Score", value: "High", trend: "up" },
+            { label: "Legal Costs", value: "Minimized", trend: "down" }
+        ],
+        content: `
+            <p>With the introduction of new data protection laws across various African nations, compliance has become a critical operational risk. Failure to comply can result in hefty fines and reputational damage.</p>
+            <p>Implementing a robust data privacy framework reduces legal risk by 85%. It also serves as a competitive differentiator, signaling to customers that their data is safe with you.</p>
+            <p>Key aspects include obtaining explicit consent for data collection, ensuring secure storage, and providing clear mechanisms for users to request data deletion.</p>
+        `,
+        actionSteps: [
+            "Appoint a Data Protection Officer (DPO).",
+            "Update privacy policies to reflect current regulations.",
+            "Conduct regular data security training for all employees."
+        ],
+        relatedIds: ["ins-1", "ins-4"]
+    },
+    {
+        id: "ins-6",
+        title: "Talent Acquisition 2.0",
+        description: "Using AI and social recruiting to find the best talent in a competitive market.",
+        category: "HR",
+        impact: "Medium",
+        date: "Oct 05, 2024",
+        metrics: [
+            { label: "Time to Hire", value: "-30%", trend: "down" },
+            { label: "Quality of Hire", value: "+25%", trend: "up" },
+            { label: "Cost per Hire", value: "-20%", trend: "down" }
+        ],
+        content: `
+            <p>The war for talent is intensifying. Traditional posting on job boards is no longer sufficient to attract top-tier candidates. "Talent Acquisition 2.0" leverages AI and social media to proactively identify and engage potential hires.</p>
+            <p>AI tools can screen resumes faster and more accurately, reducing time-to-hire by 30%. Social recruiting allows you to showcase your company culture and reach passive candidates who aren't actively looking but are open to the right opportunity.</p>
+            <p>Building a strong employer brand is central to this strategy.</p>
+        `,
+        actionSteps: [
+            "Optimize LinkedIn profiles for key team members.",
+            "Implement an Applicant Tracking System (ATS) with AI capabilities.",
+            "Create content showcasing company culture and employee stories."
+        ],
+        relatedIds: ["ins-2"]
+    }
+];
