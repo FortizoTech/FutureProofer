@@ -3,9 +3,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BookOpen, Target, Award, Clock, CheckCircle2, Lock, Sparkles } from "lucide-react";
 import { useUser } from "@/context/user-context";
+import Folder from "@/components/Folder";
 
 import { COURSES_DATA } from "@/lib/mock-db";
 
@@ -108,21 +108,42 @@ export default function LearningPaths() {
         <p className="text-muted-foreground">Structured learning journeys designed to master in-demand skills</p>
       </div>
 
-      {/* Path Selector if multiple paths available */}
+      {/* Path Selector using Folders if multiple paths available */}
       {availablePaths.length > 1 && (
-        <Tabs value={activePathKey} onValueChange={setActivePathKey} className="w-full">
-          <TabsList className="w-full justify-start overflow-x-auto bg-transparent p-0 gap-2 h-auto">
-            {availablePaths.map(key => (
-              <TabsTrigger
-                key={key}
-                value={key}
-                className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary border border-transparent data-[state=active]:border-primary/20 rounded-full px-4 py-2"
-              >
-                {COURSES_DATA[key].title}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
+        <div className="w-full">
+          <h2 className="font-serif text-xl font-semibold mb-6 text-center">Select Your Learning Path</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
+            {availablePaths.map((key, index) => {
+              const pathData = COURSES_DATA[key];
+              const colors = ['#5227FF', '#FF6B35', '#00C9A7', '#845EC2', '#FF9671'];
+              const folderColor = colors[index % colors.length];
+
+              return (
+                <Folder
+                  key={key}
+                  color={folderColor}
+                  size={1}
+                  label={pathData.title}
+                  items={[
+                    {
+                      label: `${pathData.totalCourses} Courses`,
+                      onClick: () => setActivePathKey(key)
+                    },
+                    {
+                      label: pathData.level,
+                      onClick: () => setActivePathKey(key)
+                    },
+                    {
+                      label: pathData.estimatedTime,
+                      onClick: () => setActivePathKey(key)
+                    }
+                  ]}
+                  className={activePathKey === key ? 'ring-2 ring-primary ring-offset-4 rounded-lg' : ''}
+                />
+              );
+            })}
+          </div>
+        </div>
       )}
 
       {/* Active Path Overview */}

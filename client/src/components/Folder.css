@@ -1,0 +1,114 @@
+.folder {
+    width: 200px;
+    height: 160px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.folder__back {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.folder.open .folder__back {
+    transform: rotateX(-30deg) translateY(-20px);
+}
+
+.folder__front {
+    position: absolute;
+    width: 100%;
+    height: 75%;
+    bottom: 0;
+    background: var(--folder-color);
+    border-radius: 8px 8px 4px 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+}
+
+.folder__front::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: 0;
+    width: 40%;
+    height: 20px;
+    background: var(--folder-back-color);
+    border-radius: 4px 4px 0 0;
+}
+
+.folder__front.right {
+    background: var(--folder-back-color);
+    transform: translateZ(-2px);
+    z-index: -1;
+}
+
+.paper {
+    position: absolute;
+    width: 85%;
+    height: 90%;
+    left: 7.5%;
+    top: 5%;
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    color: hsl(var(--foreground));
+    overflow: hidden;
+}
+
+.folder:not(.open) .paper {
+    transform: translateY(0) translateZ(0);
+    opacity: 0;
+}
+
+.folder.open .paper {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.folder.open .paper-1 {
+    transform: translateY(-80px) translateZ(10px) translate(var(--magnet-x, 0), var(--magnet-y, 0));
+    background: var(--paper-1);
+    transition: transform 0.2s ease-out;
+}
+
+.folder.open .paper-2 {
+    transform: translateY(-80px) translateZ(20px) translate(var(--magnet-x, 0), var(--magnet-y, 0));
+    background: var(--paper-2);
+    transition: transform 0.2s ease-out;
+}
+
+.folder.open .paper-3 {
+    transform: translateY(-80px) translateZ(30px) translate(var(--magnet-x, 0), var(--magnet-y, 0));
+    background: var(--paper-3);
+    transition: transform 0.2s ease-out;
+}
+
+.paper:hover {
+    transform: translateY(-90px) translateZ(40px) scale(1.05) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+@media (max-width: 768px) {
+    .folder {
+        width: 160px;
+        height: 130px;
+    }
+
+    .paper {
+        font-size: 12px;
+        padding: 12px;
+    }
+}
