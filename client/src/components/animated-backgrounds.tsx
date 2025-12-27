@@ -28,9 +28,9 @@ const Beams = () => {
 
         const draw = () => {
             ctx.clearRect(0, 0, width, height);
-
+            
             // Primary color base
-            const primaryHue = 221;
+            const primaryHue = 221; 
 
             beams.forEach(beam => {
                 const gradient = ctx.createLinearGradient(beam.x, 0, beam.x + beam.width, 0);
@@ -87,43 +87,47 @@ const Prism = () => {
         canvas.width = width;
         canvas.height = height;
 
-        let time = 0;
+        const prisms: { x: number; y: number; size: number; rotation: number; speed: number; color: string }[] = [];
+        for (let i = 0; i < 30; i++) {
+            prisms.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                size: Math.random() * 40 + 20,
+                rotation: Math.random() * Math.PI * 2,
+                speed: Math.random() * 0.5 + 0.1,
+                color: `hsla(${Math.random() * 60 + 200}, 70%, 60%, 0.15)` // Blue/Cyan/Purple range
+            });
+        }
 
         const draw = () => {
             ctx.clearRect(0, 0, width, height);
-            time += 0.005;
 
-            const cx = width / 2;
-            const cy = height / 2;
-
-            for (let i = 0; i < 6; i++) {
-                const angle = (i / 6) * Math.PI * 2 + time;
-                const radius = 200 + Math.sin(time * 2 + i) * 50;
-                const x = cx + Math.cos(angle) * radius;
-                const y = cy + Math.sin(angle) * radius;
-
-                const size = 100 + Math.cos(time * 3 + i) * 30;
-
+            prisms.forEach(p => {
                 ctx.save();
-                ctx.translate(x, y);
-                ctx.rotate(time + i);
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rotation);
 
                 ctx.beginPath();
-                ctx.moveTo(0, -size / 2);
-                ctx.lineTo(size / 2, size / 2);
-                ctx.lineTo(-size / 2, size / 2);
+                ctx.moveTo(0, -p.size);
+                ctx.lineTo(p.size, p.size);
+                ctx.lineTo(-p.size, p.size);
                 ctx.closePath();
 
-                const hue = (time * 50 + i * 60) % 360;
-                ctx.strokeStyle = `hsla(${hue}, 70%, 60%, 0.3)`;
-                ctx.lineWidth = 2;
+                ctx.fillStyle = p.color;
+                ctx.fill();
+                ctx.strokeStyle = p.color.replace('0.15', '0.3');
                 ctx.stroke();
 
-                ctx.fillStyle = `hsla(${hue}, 70%, 60%, 0.05)`;
-                ctx.fill();
-
                 ctx.restore();
-            }
+
+                p.y -= p.speed;
+                p.rotation += 0.005;
+
+                if (p.y + p.size < 0) {
+                    p.y = height + p.size;
+                    p.x = Math.random() * width;
+                }
+            });
 
             requestAnimationFrame(draw);
         };
@@ -165,15 +169,15 @@ const LiquidEther = () => {
             time += 0.01;
 
             const blobs = [
-                { x: width * 0.3, y: height * 0.3, r: 300, color: 'hsla(221, 83%, 53%, 0.2)' },
-                { x: width * 0.7, y: height * 0.7, r: 400, color: 'hsla(200, 80%, 60%, 0.2)' },
-                { x: width * 0.5, y: height * 0.5, r: 250, color: 'hsla(240, 70%, 70%, 0.2)' },
+                { x: width * 0.3, y: height * 0.3, r: 400, color: 'hsla(221, 83%, 53%, 0.2)' },
+                { x: width * 0.7, y: height * 0.7, r: 500, color: 'hsla(200, 80%, 60%, 0.2)' },
+                { x: width * 0.5, y: height * 0.5, r: 350, color: 'hsla(240, 70%, 70%, 0.2)' },
             ];
 
             blobs.forEach((blob, i) => {
-                const x = blob.x + Math.sin(time + i) * 100;
-                const y = blob.y + Math.cos(time * 0.8 + i) * 100;
-
+                const x = blob.x + Math.sin(time + i) * 150;
+                const y = blob.y + Math.cos(time * 0.8 + i) * 150;
+                
                 const gradient = ctx.createRadialGradient(x, y, 0, x, y, blob.r);
                 gradient.addColorStop(0, blob.color);
                 gradient.addColorStop(1, 'transparent');
@@ -278,7 +282,7 @@ export const AnimatedBackground = ({ step, className }: AnimatedBackgroundProps)
             {step === 2 && <Prism />}
             {step === 3 && <LiquidEther />}
             {step === 4 && <Ballpit />}
-
+            
             {/* Subtle dark overlay to maintain readability and glassmorphism */}
             <div className="absolute inset-0 bg-background/40 backdrop-blur-[2px]" />
         </div>

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -76,8 +75,8 @@ export default function Onboarding() {
   const ghostInputClass = "border-0 border-b border-white/20 bg-transparent rounded-none px-0 py-2 h-auto text-lg focus-visible:ring-0 focus-visible:border-primary transition-colors placeholder:text-muted-foreground/50";
   const labelClass = "text-xs uppercase tracking-widest text-muted-foreground font-medium mb-2 block";
 
-  // Increased transparency: bg-white/8
-  const glassCardClass = "bg-white/8 backdrop-blur-3xl border-white/15 shadow-2xl rounded-3xl overflow-hidden min-h-[500px] flex flex-col border";
+  // Increased transparency: bg-white/5 backdrop-blur-xl
+  const glassCardClass = "bg-white/5 backdrop-blur-xl border-white/10 shadow-2xl rounded-3xl overflow-hidden min-h-[500px] flex flex-col border";
 
   const primaryButtonClass = "bg-primary hover:bg-primary/90 text-primary-foreground shadow-[0_0_20px_rgba(59,130,246,0.5)] hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-all duration-300 rounded-full px-8";
   const outlineButtonClass = "border-white/20 hover:bg-white/5 text-muted-foreground hover:text-foreground rounded-full px-6";
@@ -86,37 +85,33 @@ export default function Onboarding() {
     <div className="min-h-screen flex flex-col items-center relative overflow-y-auto font-sans">
       <AnimatedBackground step={step} className="opacity-100" />
 
-      {/* Fixed Header */}
-      <div className="fixed inset-x-0 top-0 z-50 bg-background/60 backdrop-blur-md border-b border-white/10 px-6 py-4 transition-all">
+      {/* Fixed Header & Progress */}
+      <div className="fixed inset-x-0 top-0 z-50 bg-background/40 backdrop-blur-md border-b border-white/10 px-6 py-6 transition-all">
         <div className="max-w-4xl mx-auto text-center">
-          <img src={logoUrl} alt="Future Proofer" className="h-10 w-10 mx-auto mb-3 drop-shadow-2xl" />
-          <h1 className="font-serif text-3xl md:text-4xl font-light mb-1 tracking-tight bg-gradient-to-r from-primary via-white to-primary bg-clip-text text-transparent drop-shadow-lg relative inline-block">
+          <img src={logoUrl} alt="Future Proofer" className="h-12 w-12 mx-auto mb-4 drop-shadow-2xl" />
+          <h1 className="font-serif text-5xl md:text-6xl font-normal mb-2 tracking-tight text-foreground drop-shadow-xl">
             Future Proofer
-            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-40 blur-xl -z-10" />
           </h1>
-          <p className="text-muted-foreground font-light tracking-wide uppercase text-[10px]">
+          <p className="text-muted-foreground font-medium tracking-widest uppercase text-xs mb-6">
             AI Foresight Engine Initialization
           </p>
-        </div>
-      </div>
 
-      {/* Fixed Progress Bar */}
-      <div className="fixed top-32 left-0 right-0 z-40 pointer-events-none">
-        <div className="max-w-md mx-auto px-6">
-          <div className="h-0.5 w-full bg-white/10 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-primary shadow-[0_0_10px_rgba(59,130,246,0.8)] transition-all duration-700 ease-out"
-              style={{ width: `${progress}%` }}
-            />
+          <div className="max-w-md mx-auto">
+            <div className="h-1.5 w-full bg-white/20 rounded-full overflow-hidden backdrop-blur-sm border border-white/5">
+              <div
+                className="h-full bg-primary shadow-[0_0_15px_rgba(59,130,246,1)] transition-all duration-700 ease-out"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+            <p className="text-[10px] text-muted-foreground mt-2 text-center font-bold tracking-widest uppercase">
+              Step {step} / 4
+            </p>
           </div>
-          <p className="text-[10px] text-muted-foreground mt-2 text-center font-medium tracking-widest uppercase">
-            Step {step} / 4
-          </p>
         </div>
       </div>
 
       {/* Main Content with top padding */}
-      <div className="w-full max-w-4xl z-10 relative pt-48 pb-10 px-6 flex-1 flex flex-col">
+      <div className="w-full max-w-4xl z-10 relative pt-80 pb-10 px-6 flex-1 flex flex-col">
         <Card className={glassCardClass}>
           {step === 1 && (
             <>
@@ -313,4 +308,3 @@ export default function Onboarding() {
     </div>
   );
 }
-
