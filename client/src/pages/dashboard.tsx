@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useUser } from "@/context/user-context";
 import { useLocation } from "wouter";
 import { MOCK_INSIGHTS } from "@/lib/mock-db";
+import MagicBento from "@/components/MagicBento";
 
 export default function Dashboard() {
     const { user } = useUser();
@@ -92,9 +93,9 @@ export default function Dashboard() {
                         <h3 className="font-serif text-lg font-semibold mb-4">Quick Actions</h3>
                         {/* Mobile: Icon Grid, Desktop: Vertical List with Labels */}
                         <div className="grid grid-cols-3 gap-2 md:flex md:flex-col md:gap-4">
-                            <Button 
-                                variant="outline" 
-                                className="h-16 w-full flex-col gap-1 md:h-auto md:flex-row md:justify-start md:gap-4 md:px-6 md:py-4 hover:bg-primary/5 hover:border-primary/30 transition-all" 
+                            <Button
+                                variant="outline"
+                                className="h-16 w-full flex-col gap-1 md:h-auto md:flex-row md:justify-start md:gap-4 md:px-6 md:py-4 hover:bg-primary/5 hover:border-primary/30 transition-all"
                                 onClick={() => setLocation('/connect')}
                             >
                                 <div className="p-2 bg-primary/10 rounded-full md:p-2">
@@ -106,9 +107,9 @@ export default function Dashboard() {
                                 </div>
                                 <span className="text-[10px] md:hidden">Mentor</span>
                             </Button>
-                            <Button 
-                                variant="outline" 
-                                className="h-16 w-full flex-col gap-1 md:h-auto md:flex-row md:justify-start md:gap-4 md:px-6 md:py-4 hover:bg-primary/5 hover:border-primary/30 transition-all" 
+                            <Button
+                                variant="outline"
+                                className="h-16 w-full flex-col gap-1 md:h-auto md:flex-row md:justify-start md:gap-4 md:px-6 md:py-4 hover:bg-primary/5 hover:border-primary/30 transition-all"
                                 onClick={() => setLocation('/learning')}
                             >
                                 <div className="p-2 bg-primary/10 rounded-full md:p-2">
@@ -120,9 +121,9 @@ export default function Dashboard() {
                                 </div>
                                 <span className="text-[10px] md:hidden">Learn</span>
                             </Button>
-                            <Button 
-                                variant="outline" 
-                                className="h-16 w-full flex-col gap-1 md:h-auto md:flex-row md:justify-start md:gap-4 md:px-6 md:py-4 hover:bg-primary/5 hover:border-primary/30 transition-all" 
+                            <Button
+                                variant="outline"
+                                className="h-16 w-full flex-col gap-1 md:h-auto md:flex-row md:justify-start md:gap-4 md:px-6 md:py-4 hover:bg-primary/5 hover:border-primary/30 transition-all"
                                 onClick={() => setLocation('/insights')}
                             >
                                 <div className="p-2 bg-primary/10 rounded-full md:p-2">
@@ -168,5 +169,23 @@ export default function Dashboard() {
                 </div>
             </div>
         </div>
+
+            {/* Magic Bento Section */ }
+    <div className="space-y-4 md:space-y-6">
+        <h2 className="font-serif text-lg md:text-xl font-semibold">System Overview</h2>
+        <MagicBento
+            textAutoHide={true}
+            enableStars={true}
+            enableSpotlight={true}
+            enableBorderGlow={true}
+            enableTilt={true}
+            enableMagnetism={true}
+            clickEffect={true}
+            spotlightRadius={300}
+            particleCount={12}
+            glowColor="132, 0, 255"
+        />
+    </div>
+        </div >
     );
 }
