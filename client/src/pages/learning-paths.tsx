@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { BookOpen, Target, Award, Clock, CheckCircle2, Lock, Sparkles } from "lucide-react";
+import { BookOpen, Target, Award, Clock, CheckCircle2, Lock, Sparkles, X } from "lucide-react";
 import { useUser } from "@/context/user-context";
 import Folder from "@/components/Folder";
 
@@ -12,6 +12,7 @@ import { COURSES_DATA } from "@/lib/mock-db";
 export default function LearningPaths() {
   const { user } = useUser();
   const [activePathKey, setActivePathKey] = useState<string>(user.selectedCareer || "General Business");
+  const [isFolderOpen, setIsFolderOpen] = useState(false);
 
   useEffect(() => {
     if (user.selectedCareer && COURSES_DATA[user.selectedCareer]) {
@@ -112,28 +113,94 @@ export default function LearningPaths() {
         {/* Path Selector using single Folder if multiple paths available */}
         {availablePaths.length > 1 && (
           <div className="flex flex-col items-center gap-2">
-            <Folder
-              color="#5227FF"
-              size={0.5}
-              items={availablePaths.map(key => {
-                const pathData = COURSES_DATA[key];
-                return (
-                  <button
-                    onClick={() => setActivePathKey(key)}
-                    className="w-full h-full flex items-center justify-center text-center hover:scale-105 transition-transform"
-                  >
-                    {pathData.title}
-                  </button>
-                );
-              })}
-              className=""
-            />
-            <p className="text-xs text-muted-foreground text-center">
-              {COURSES_DATA[activePathKey]?.title}
+            <div className="relative group">
+              <div className="absolute -inset-4 bg-primary/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <Folder
+                color="#5227FF"
+                size={0.5}
+                items={[]}
+                onOpenChange={setIsFolderOpen}
+                className="relative z-10"
+              />
+            </div>
+            <p className="text-xs text-muted-foreground text-center animate-pulse">
+              {isFolderOpen ? "Select a path below" : "Click folder to view paths"}
             </p>
           </div>
         )}
       </div>
+
+      {/* Full-width path cards modal when folder is open */}
+      {availablePaths.length > 1 && isFolderOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-500">
+          <div
+            className="relative w-full max-w-5xl max-h-[85vh] overflow-y-auto rounded-3xl border border-white/20 bg-white/95 backdrop-blur-2xl shadow-2xl p-8 animate-in zoom-in-95 slide-in-from-bottom-10 duration-500 ease-out"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setIsFolderOpen(false)}
+              className="absolute top-6 right-6 p-2 rounded-full hover:bg-slate-100 transition-colors text-slate-500 hover:text-slate-900"
+            >
+              <X className="w-6 h-6" />
+            </button>
+
+            <h2 className="font-serif text-3xl font-bold mb-3 text-center text-slate-900">Select Your Learning Path</h2>
+            <p className="text-center text-slate-500 mb-10 text-lg">Choose the path that best aligns with your career goals</p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {availablePaths.map(key => {
+                const pathData = COURSES_DATA[key];
+                const isActive = activePathKey === key;
+                return (
+                  <button
+                    key={key}
+                    onClick={() => {
+                      setActivePathKey(key);
+                      setIsFolderOpen(false);
+                    }}
+                    className={`
+                      relative p-6 rounded-2xl transition-all duration-300 text-left group
+                      border flex flex-col h-full
+                      ${isActive
+                        ? 'bg-primary/5 border-primary ring-1 ring-primary shadow-lg shadow-primary/10'
+                        : 'bg-white border-slate-200 hover:border-primary/50 hover:shadow-xl hover:-translate-y-1'
+                      }
+                    `}
+                  >
+                    <div className={`mb-4 p-3 rounded-xl w-fit border ${isActive ? 'bg-primary/10 border-primary/20' : 'bg-slate-100 border-slate-200'}`}>
+                      <Sparkles className={`w-6 h-6 ${isActive ? 'text-primary' : 'text-slate-600'}`} />
+                    </div>
+
+                    <h3 className={`font-serif text-xl font-bold mb-2 ${isActive ? 'text-primary' : 'text-slate-900'} group-hover:text-primary transition-colors`}>
+                      {pathData.title}
+                    </h3>
+
+                    <p className="text-sm text-slate-500 mb-6 line-clamp-3 leading-relaxed">
+                      {pathData.description}
+                    </p>
+
+                    <div className="mt-auto space-y-3">
+                      <div className="flex items-center justify-between text-xs text-slate-400 border-t border-slate-100 pt-3">
+                        <span className="flex items-center gap-1"><BookOpen className="w-3 h-3" /> {pathData.totalCourses} Courses</span>
+                        <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {pathData.estimatedTime}</span>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <span className={`text-xs px-3 py-1 rounded-full border ${isActive ? 'bg-primary/10 border-primary/20 text-primary' : 'bg-slate-100 border-slate-200 text-slate-600'}`}>
+                          {pathData.level}
+                        </span>
+                        {isActive && <CheckCircle2 className="w-5 h-5 text-primary" />}
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+          {/* Click outside to close */}
+          <div className="absolute inset-0 -z-10" onClick={() => setIsFolderOpen(false)} />
+        </div>
+      )}
 
       {/* Active Path Overview */}
       <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-accent/5">
@@ -361,6 +428,6 @@ export default function LearningPaths() {
           ))}
         </div>
       </div>
-    </div>
+    </div >
   );
 }

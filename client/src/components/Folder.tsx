@@ -24,9 +24,10 @@ interface FolderProps {
     size?: number;
     items?: React.ReactNode[];
     className?: string;
+    onOpenChange?: (open: boolean) => void;
 }
 
-const Folder = ({ color = '#5227FF', size = 1, items = [], className = '' }: FolderProps) => {
+const Folder = ({ color = '#5227FF', size = 1, items = [], className = '', onOpenChange }: FolderProps) => {
     const maxItems = 3;
     const papers = items.slice(0, maxItems);
     while (papers.length < maxItems) {
@@ -42,7 +43,11 @@ const Folder = ({ color = '#5227FF', size = 1, items = [], className = '' }: Fol
     const paper3 = '#ffffff';
 
     const handleClick = () => {
-        setOpen(prev => !prev);
+        const newOpen = !open;
+        setOpen(newOpen);
+        if (onOpenChange) {
+            onOpenChange(newOpen);
+        }
         if (open) {
             setPaperOffsets(Array.from({ length: maxItems }, () => ({ x: 0, y: 0 })));
         }
