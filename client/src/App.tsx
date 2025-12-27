@@ -23,11 +23,23 @@ import AuthLayout from "@/components/auth-layout";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import InsightDetails from "@/pages/insight-details";
+import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
+import { AppPreloader } from "@/components/app-preloader";
+
 export default function App() {
+  const [appReady, setAppReady] = useState(false);
+
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="light">
         <TooltipProvider>
+          <AnimatePresence mode="wait">
+            {!appReady && (
+              <AppPreloader onComplete={() => setAppReady(true)} key="preloader" />
+            )}
+          </AnimatePresence>
+
           <Switch>
             {/* Public routes */}
             <Route path="/" component={Landing} />
