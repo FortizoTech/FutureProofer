@@ -35,20 +35,20 @@ export default function Learning() {
                     <p className="text-lg md:text-xl text-muted-foreground mb-6 max-w-2xl line-clamp-2">
                         {featuredClass.description}
                     </p>
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-3">
                         <Button
-                            size="lg"
-                            className="gap-2 text-lg px-8 py-6 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all"
+                            size="default"
+                            className="gap-2 px-6 py-2 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all"
                             onClick={() => setLocation(`/learning/masterclass/${featuredClass.id}`)}
                         >
-                            <Play className="fill-current h-5 w-5" /> Watch Now
+                            <Play className="fill-current h-4 w-4" /> Watch Now
                         </Button>
                         <Button
                             variant="outline"
-                            size="lg"
-                            className="gap-2 text-lg px-8 py-6 backdrop-blur-sm bg-background/10 border-white/10 hover:bg-background/20"
+                            size="default"
+                            className="gap-2 px-6 py-2 backdrop-blur-sm bg-background/10 border-white/10 hover:bg-background/20"
                         >
-                            <Star className="h-5 w-5" /> Add to List
+                            <Star className="h-4 w-4" /> Add to List
                         </Button>
                     </div>
                 </div>

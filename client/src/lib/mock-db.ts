@@ -405,7 +405,7 @@ export const ALEX_MASTERCLASSES = [
         role: "Founder, ADP Events",
         category: "Leadership",
         videoId: "E4KgnTG7bLQ",
-        thumbnail: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80",
+        thumbnail: "https://i.ytimg.com/vi/E4KgnTG7bLQ/maxresdefault.jpg",
         description: "Learn the secrets behind scaling a local events company into a global powerhouse. Alex shares his journey, mistakes, and the strategic decisions that led to international success.",
         duration: "1h 15m",
         chapters: [
@@ -423,7 +423,7 @@ export const ALEX_MASTERCLASSES = [
         role: "Serial Entrepreneur",
         category: "Entrepreneurship",
         videoId: "4Ff39mAmHGU",
-        thumbnail: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&q=80",
+        thumbnail: "https://i.ytimg.com/vi/4Ff39mAmHGU/maxresdefault.jpg",
         description: "The mindset shift required to move from small business owner to empire builder. Discover how to think bigger, act bolder, and build a legacy.",
         duration: "55m",
         chapters: [
@@ -441,7 +441,7 @@ export const ALEX_MASTERCLASSES = [
         role: "Leadership Coach",
         category: "Strategy",
         videoId: "2rJrMBMU1wI",
-        thumbnail: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800&q=80",
+        thumbnail: "https://i.ytimg.com/vi/2rJrMBMU1wI/maxresdefault.jpg",
         description: "Why authenticity is your strongest asset in high-stakes negotiations and team management. Learn to lead with empathy and strength.",
         duration: "45m",
         chapters: [
@@ -459,7 +459,7 @@ export const ALEX_MASTERCLASSES = [
         role: "Innovation Strategist",
         category: "Strategy",
         videoId: "TIYQgMV0wdg",
-        thumbnail: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
+        thumbnail: "https://i.ytimg.com/vi/TIYQgMV0wdg/maxresdefault.jpg",
         description: "Navigating complex markets with innovative strategies. How to stay ahead of the curve and disrupt your industry before someone else does.",
         duration: "1h 05m",
         chapters: [
@@ -477,7 +477,7 @@ export const ALEX_MASTERCLASSES = [
         role: "Futurist",
         category: "Future Trends",
         videoId: "xQy5UxaIoU4",
-        thumbnail: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+        thumbnail: "https://i.ytimg.com/vi/xQy5UxaIoU4/maxresdefault.jpg",
         description: "Preparing your business for the next decade of disruption. AI, automation, and the changing landscape of work.",
         duration: "50m",
         chapters: [
