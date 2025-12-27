@@ -22,6 +22,14 @@ app.use((req, res, next) => {
   next();
 });
 
+// Global error handler
+app.use((err: any, req: any, res: any, next: any) => {
+  console.error('Global error handler:', err);
+  const status = err.status || err.statusCode || 500;
+  const message = err.message || 'Internal Server Error';
+  res.status(status).json({ message, error: process.env.NODE_ENV !== 'production' ? err : undefined });
+});
+
 // --- Development-only logic ---
 if (process.env.NODE_ENV !== 'production') {
   const __filename = fileURLToPath(import.meta.url);

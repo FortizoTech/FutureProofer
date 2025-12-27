@@ -5,7 +5,9 @@ import jwt from 'jsonwebtoken';
 const authRouter = Router();
 
 // Initialize Google OAuth client
-const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const googleClient = process.env.GOOGLE_CLIENT_ID
+  ? new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
+  : null;
 
 // JWT secret - in production, use a strong secret from environment variables
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
@@ -100,6 +102,11 @@ authRouter.post('/google', async (req, res) => {
 
     if (!idToken) {
       return res.status(400).json({ message: 'ID token is required' });
+    }
+
+    if (!googleClient) {
+      console.error('Google Client ID not configured');
+      return res.status(500).json({ message: 'Google authentication not configured' });
     }
 
     // Verify the Google ID token
