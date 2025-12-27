@@ -80,21 +80,21 @@ export default function Onboarding() {
   const outlineButtonClass = "border-white/20 hover:bg-white/5 text-muted-foreground hover:text-foreground rounded-full px-6";
 
   return (
-    <div className="min-h-screen flex flex-col items-center p-6 relative overflow-y-auto font-sans">
+    <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden font-sans">
       <AnimatedBackground step={step} className="opacity-70" />
 
-      <div className="sticky top-0 z-50 w-full max-w-4xl bg-background/5 backdrop-blur-md pt-6 pb-6 mb-8 transition-all rounded-b-3xl border-b border-white/5 shadow-lg">
-        <div className="text-center mb-6">
-          <img src={logoUrl} alt="Future Proofer" className="h-10 w-10 mx-auto mb-3 drop-shadow-2xl" />
-          <h1 className="font-serif text-3xl md:text-4xl font-light mb-1 tracking-tight text-foreground">
+      <div className="w-full max-w-4xl z-10 relative">
+        <div className="text-center mb-10">
+          <img src={logoUrl} alt="Future Proofer" className="h-12 w-12 mx-auto mb-6 drop-shadow-2xl" />
+          <h1 className="font-serif text-4xl md:text-5xl font-light mb-3 tracking-tight text-foreground">
             Future Proofer
           </h1>
-          <p className="text-muted-foreground font-light tracking-wide uppercase text-[10px]">
+          <p className="text-muted-foreground font-light tracking-wide uppercase text-xs">
             AI Foresight Engine Initialization
           </p>
         </div>
 
-        <div className="max-w-md mx-auto px-4">
+        <div className="mb-8 max-w-md mx-auto">
           <div className="h-0.5 w-full bg-white/10 rounded-full overflow-hidden">
             <div
               className="h-full bg-primary shadow-[0_0_10px_rgba(59,130,246,0.8)] transition-all duration-700 ease-out"
@@ -105,9 +105,6 @@ export default function Onboarding() {
             Step {step} / 4
           </p>
         </div>
-      </div>
-
-      <div className="w-full max-w-4xl z-10 relative flex-1 flex flex-col pb-10">
 
         <Card className={glassCardClass}>
           {step === 1 && (
