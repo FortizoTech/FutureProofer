@@ -83,21 +83,21 @@
 }
 
 .folder.open .paper-1 {
-    transform: translateY(-100px) translateZ(30px) rotateX(15deg) translate(var(--magnet-x, 0), var(--magnet-y, 0));
+    transform: translateX(-60px) translateY(-100px) translateZ(30px) rotateX(15deg) rotateY(-15deg) translate(var(--magnet-x, 0), var(--magnet-y, 0));
     background: var(--paper-1);
     transition: transform 0.2s ease-out;
     z-index: 3;
 }
 
 .folder.open .paper-2 {
-    transform: translateY(-100px) translateZ(20px) rotateX(15deg) translate(var(--magnet-x, 0), var(--magnet-y, 0));
+    transform: translateX(0px) translateY(-100px) translateZ(30px) rotateX(15deg) translate(var(--magnet-x, 0), var(--magnet-y, 0));
     background: var(--paper-2);
     transition: transform 0.2s ease-out;
     z-index: 2;
 }
 
 .folder.open .paper-3 {
-    transform: translateY(-100px) translateZ(10px) rotateX(15deg) translate(var(--magnet-x, 0), var(--magnet-y, 0));
+    transform: translateX(60px) translateY(-100px) translateZ(30px) rotateX(15deg) rotateY(15deg) translate(var(--magnet-x, 0), var(--magnet-y, 0));
     background: var(--paper-3);
     transition: transform 0.2s ease-out;
     z-index: 1;
@@ -120,9 +120,15 @@
         padding: 10px;
     }
 
-    .folder.open .paper-1,
-    .folder.open .paper-2,
+    .folder.open .paper-1 {
+        transform: translateX(-40px) translateY(-80px) translateZ(20px) rotateX(15deg) rotateY(-15deg);
+    }
+
+    .folder.open .paper-2 {
+        transform: translateX(0px) translateY(-80px) translateZ(20px) rotateX(15deg);
+    }
+
     .folder.open .paper-3 {
-        transform: translateY(-80px) translateZ(20px) rotateX(15deg);
+        transform: translateX(40px) translateY(-80px) translateZ(20px) rotateX(15deg) rotateY(15deg);
     }
 }
