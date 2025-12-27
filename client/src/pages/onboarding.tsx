@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import logoUrl from "@assets/Future_Proofer_Logo-ig-square-1080-1080-removebg-preview_1762643734864.png";
 import { useLocation } from "wouter";
 import { useUser } from "@/context/user-context";
+import { AnimatedBackground } from "@/components/animated-backgrounds";
 
 export default function Onboarding() {
   const [, setLocation] = useLocation();
@@ -70,20 +71,22 @@ export default function Onboarding() {
   const progress = (step / 4) * 100;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 flex items-center justify-center p-6">
-      <div className="w-full max-w-3xl">
+    <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
+      <AnimatedBackground step={step} />
+
+      <div className="w-full max-w-3xl z-10 relative">
         <div className="text-center mb-8">
-          <img src={logoUrl} alt="Future Proofer" className="h-16 w-16 mx-auto mb-4" />
+          <img src={logoUrl} alt="Future Proofer" className="h-16 w-16 mx-auto mb-4 drop-shadow-lg" />
           <h1 className="font-serif text-3xl font-bold mb-2">Welcome to Future Proofer</h1>
-          <p className="text-muted-foreground">Let's set up your personalized AI foresight experience</p>
+          <p className="text-muted-foreground font-medium">Let's set up your personalized AI foresight experience</p>
         </div>
 
         <div className="mb-6">
           <Progress value={progress} className="h-2" />
-          <p className="text-sm text-muted-foreground mt-2 text-center">Step {step} of 4</p>
+          <p className="text-sm text-muted-foreground mt-2 text-center font-medium">Step {step} of 4</p>
         </div>
 
-        <Card>
+        <Card className="bg-background/80 backdrop-blur-md border-primary/10 shadow-xl">
           {step === 1 && (
             <>
               <CardHeader>
@@ -121,6 +124,7 @@ export default function Onboarding() {
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                       data-testid="input-fullname"
+                      className="bg-background/50"
                     />
                   </div>
                   <div className="space-y-2">
@@ -132,6 +136,7 @@ export default function Onboarding() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       data-testid="input-email"
+                      className="bg-background/50"
                     />
                   </div>
                   <div className="space-y-2">
@@ -142,6 +147,7 @@ export default function Onboarding() {
                       value={location}
                       onChange={(e) => setLocationInput(e.target.value)}
                       data-testid="input-location"
+                      className="bg-background/50"
                     />
                   </div>
                   <div className="space-y-2">
@@ -152,6 +158,7 @@ export default function Onboarding() {
                       value={industry}
                       onChange={(e) => setIndustry(e.target.value)}
                       data-testid="input-industry"
+                      className="bg-background/50"
                     />
                   </div>
                 </div>
@@ -179,7 +186,7 @@ export default function Onboarding() {
                     <Badge
                       key={skill}
                       variant={selectedSkills.includes(skill) ? "default" : "outline"}
-                      className="cursor-pointer px-4 py-2 text-sm hover-elevate active-elevate-2"
+                      className="cursor-pointer px-4 py-2 text-sm hover-elevate active-elevate-2 transition-all"
                       onClick={() => handleSkillToggle(skill)}
                       data-testid={`badge-skill-${skill.toLowerCase().replace(/\s+/g, '-')}`}
                     >
@@ -192,7 +199,7 @@ export default function Onboarding() {
                   <Textarea
                     id="goals"
                     placeholder="Tell us about your career or business goals..."
-                    className="min-h-[100px]"
+                    className="min-h-[100px] bg-background/50"
                     value={goals}
                     onChange={(e) => setGoals(e.target.value)}
                     data-testid="textarea-goals"
@@ -217,9 +224,9 @@ export default function Onboarding() {
                 <CardDescription>Your personalized dashboard is ready</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-br from-primary/10 to-accent/10 rounded-lg p-6 border border-primary/20">
+                <div className="bg-gradient-to-br from-primary/10 to-accent/10 rounded-lg p-6 border border-primary/20 backdrop-blur-sm">
                   <div className="flex items-start gap-4 mb-4">
-                    <div className="p-3 bg-primary rounded-lg">
+                    <div className="p-3 bg-primary rounded-lg shadow-lg shadow-primary/20">
                       <svg className="h-6 w-6 text-primary-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
@@ -250,7 +257,7 @@ export default function Onboarding() {
                   <Button variant="outline" onClick={() => setStep(3)} data-testid="button-back">
                     Back
                   </Button>
-                  <Button onClick={handleGetStarted} data-testid="button-get-started">
+                  <Button onClick={handleGetStarted} data-testid="button-get-started" className="shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all">
                     Get Started
                   </Button>
                 </div>

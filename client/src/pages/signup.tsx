@@ -44,7 +44,7 @@ export default function Signup() {
         // Render the Google Sign-In button
         window.google.accounts.id.renderButton(
           document.getElementById('google-signin-button')!,
-          { theme: 'outline', size: 'large', width: '100%' }
+          { theme: 'outline', size: 'large' }
         );
       }
     };
