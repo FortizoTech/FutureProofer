@@ -103,33 +103,37 @@ export default function LearningPaths() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="font-serif text-3xl font-bold mb-2" data-testid="text-page-title">Learning Paths</h1>
-        <p className="text-muted-foreground">Structured learning journeys designed to master in-demand skills</p>
-      </div>
-
-      {/* Path Selector using single Folder if multiple paths available */}
-      {availablePaths.length > 1 && (
-        <div className="w-full flex flex-col items-center">
-          <h2 className="font-serif text-xl font-semibold mb-6 text-center">Your Learning Paths</h2>
-          <Folder
-            color="#5227FF"
-            size={1.2}
-            label="Click to explore your paths"
-            items={availablePaths.map(key => {
-              const pathData = COURSES_DATA[key];
-              return {
-                label: pathData.title,
-                onClick: () => setActivePathKey(key)
-              };
-            })}
-            className="mb-4"
-          />
-          <p className="text-sm text-muted-foreground text-center mt-4">
-            Currently viewing: <span className="font-semibold text-primary">{COURSES_DATA[activePathKey]?.title}</span>
-          </p>
+      <div className="flex items-center justify-between gap-4 flex-wrap">
+        <div>
+          <h1 className="font-serif text-3xl font-bold mb-2" data-testid="text-page-title">Learning Paths</h1>
+          <p className="text-muted-foreground">Structured learning journeys designed to master in-demand skills</p>
         </div>
-      )}
+
+        {/* Path Selector using single Folder if multiple paths available */}
+        {availablePaths.length > 1 && (
+          <div className="flex flex-col items-center gap-2">
+            <Folder
+              color="#5227FF"
+              size={0.5}
+              items={availablePaths.map(key => {
+                const pathData = COURSES_DATA[key];
+                return (
+                  <button
+                    onClick={() => setActivePathKey(key)}
+                    className="w-full h-full flex items-center justify-center text-center hover:scale-105 transition-transform"
+                  >
+                    {pathData.title}
+                  </button>
+                );
+              })}
+              className=""
+            />
+            <p className="text-xs text-muted-foreground text-center">
+              {COURSES_DATA[activePathKey]?.title}
+            </p>
+          </div>
+        )}
+      </div>
 
       {/* Active Path Overview */}
       <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-accent/5">

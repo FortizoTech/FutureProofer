@@ -19,24 +19,18 @@ const darkenColor = (hex: string, percent: number): string => {
     return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
 };
 
-interface FolderItem {
-    label: string;
-    onClick: () => void;
-}
-
 interface FolderProps {
     color?: string;
     size?: number;
-    items?: FolderItem[];
+    items?: React.ReactNode[];
     className?: string;
-    label?: string;
 }
 
-const Folder = ({ color = '#5227FF', size = 1, items = [], className = '', label = '' }: FolderProps) => {
+const Folder = ({ color = '#5227FF', size = 1, items = [], className = '' }: FolderProps) => {
     const maxItems = 3;
     const papers = items.slice(0, maxItems);
     while (papers.length < maxItems) {
-        papers.push({ label: '', onClick: () => { } });
+        papers.push(null);
     }
 
     const [open, setOpen] = useState(false);
@@ -76,13 +70,6 @@ const Folder = ({ color = '#5227FF', size = 1, items = [], className = '', label
         });
     };
 
-    const handlePaperClick = (e: React.MouseEvent<HTMLDivElement>, item: FolderItem) => {
-        e.stopPropagation();
-        if (item.onClick) {
-            item.onClick();
-        }
-    };
-
     const folderStyle = {
         '--folder-color': color,
         '--folder-back-color': folderBackColor,
@@ -95,33 +82,29 @@ const Folder = ({ color = '#5227FF', size = 1, items = [], className = '', label
     const scaleStyle = { transform: `scale(${size})` };
 
     return (
-        <div className={`flex flex-col items-center gap-4 ${className}`}>
-            {label && <p className="text-sm font-medium text-muted-foreground">{label}</p>}
-            <div style={scaleStyle}>
-                <div className={folderClassName} style={folderStyle} onClick={handleClick}>
-                    <div className="folder__back">
-                        {papers.map((item, i) => (
-                            <div
-                                key={i}
-                                className={`paper paper-${i + 1}`}
-                                onMouseMove={e => handlePaperMouseMove(e, i)}
-                                onMouseLeave={e => handlePaperMouseLeave(e, i)}
-                                onClick={e => handlePaperClick(e, item)}
-                                style={
-                                    open
-                                        ? {
-                                            '--magnet-x': `${paperOffsets[i]?.x || 0}px`,
-                                            '--magnet-y': `${paperOffsets[i]?.y || 0}px`
-                                        } as React.CSSProperties
-                                        : {}
-                                }
-                            >
-                                {item.label}
-                            </div>
-                        ))}
-                        <div className="folder__front"></div>
-                        <div className="folder__front right"></div>
-                    </div>
+        <div style={scaleStyle} className={className}>
+            <div className={folderClassName} style={folderStyle} onClick={handleClick}>
+                <div className="folder__back">
+                    {papers.map((item, i) => (
+                        <div
+                            key={i}
+                            className={`paper paper-${i + 1}`}
+                            onMouseMove={e => handlePaperMouseMove(e, i)}
+                            onMouseLeave={e => handlePaperMouseLeave(e, i)}
+                            style={
+                                open
+                                    ? {
+                                        '--magnet-x': `${paperOffsets[i]?.x || 0}px`,
+                                        '--magnet-y': `${paperOffsets[i]?.y || 0}px`
+                                    } as React.CSSProperties
+                                    : {}
+                            }
+                        >
+                            {item}
+                        </div>
+                    ))}
+                    <div className="folder__front"></div>
+                    <div className="folder__front right"></div>
                 </div>
             </div>
         </div>
