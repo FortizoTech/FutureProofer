@@ -168,24 +168,23 @@ export default function Dashboard() {
                     ))}
                 </div>
             </div>
-        </div>
 
-            {/* Magic Bento Section */ }
-    <div className="space-y-4 md:space-y-6">
-        <h2 className="font-serif text-lg md:text-xl font-semibold">System Overview</h2>
-        <MagicBento
-            textAutoHide={true}
-            enableStars={true}
-            enableSpotlight={true}
-            enableBorderGlow={true}
-            enableTilt={true}
-            enableMagnetism={true}
-            clickEffect={true}
-            spotlightRadius={300}
-            particleCount={12}
-            glowColor="132, 0, 255"
-        />
-    </div>
-        </div >
+            {/* Magic Bento Section */}
+            <div className="space-y-4 md:space-y-6">
+                <h2 className="font-serif text-lg md:text-xl font-semibold">System Overview</h2>
+                <MagicBento
+                    textAutoHide={true}
+                    enableStars={true}
+                    enableSpotlight={true}
+                    enableBorderGlow={true}
+                    enableTilt={true}
+                    enableMagnetism={true}
+                    clickEffect={true}
+                    spotlightRadius={300}
+                    particleCount={12}
+                    glowColor="132, 0, 255"
+                />
+            </div>
+        </div>
     );
 }
