@@ -21,22 +21,39 @@ interface UserContextType {
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export function UserProvider({ children }: { children: ReactNode }) {
-    const [user, setUser] = useState<User>({
-        fullName: '',
-        email: '',
-        location: '',
-        selectedCareer: '',
-        selectedSkills: [],
-        userType: 'career',
-        bio: '',
-        profileImageUrl: ''
+    const [user, setUser] = useState<User>(() => {
+        if (typeof window !== 'undefined') {
+            const saved = localStorage.getItem('future_proofer_user');
+            if (saved) {
+                try {
+                    return JSON.parse(saved);
+                } catch (e) {
+                    console.error('Failed to parse user data', e);
+                }
+            }
+        }
+        return {
+            fullName: '',
+            email: '',
+            location: '',
+            selectedCareer: '',
+            selectedSkills: [],
+            userType: 'career',
+            bio: '',
+            profileImageUrl: ''
+        };
     });
 
     const updateUser = (updates: Partial<User>) => {
-        setUser(prev => ({ ...prev, ...updates }));
+        setUser(prev => {
+            const newUser = { ...prev, ...updates };
+            localStorage.setItem('future_proofer_user', JSON.stringify(newUser));
+            return newUser;
+        });
     };
 
     const clearUser = () => {
+        localStorage.removeItem('future_proofer_user');
         setUser({
             fullName: '',
             email: '',
