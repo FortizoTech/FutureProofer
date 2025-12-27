@@ -247,3 +247,21 @@
     inset: -1px;
   }
 }
+
+/* Magic Card Border Glow */
+.magic-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 2px;
+  background: radial-gradient(circle at var(--glow-x, 50%) var(--glow-y, 50%),
+      rgba(var(--glow-color), var(--glow-intensity, 0)) 0%,
+      transparent 100px);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 20;
+}

@@ -1,4 +1,5 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { MagicCard } from "@/components/magic-card";
+import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { Download, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -15,7 +16,7 @@ export function ForecastChart({ title, description, data }: ForecastChartProps) 
   const [period, setPeriod] = useState("1Y");
 
   return (
-    <Card data-testid="card-forecast-chart">
+    <MagicCard className="h-full" data-testid="card-forecast-chart">
       <CardHeader>
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div className="flex-1">
@@ -44,16 +45,16 @@ export function ForecastChart({ title, description, data }: ForecastChartProps) 
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-            <XAxis 
-              dataKey="name" 
+            <XAxis
+              dataKey="name"
               stroke="hsl(var(--muted-foreground))"
               style={{ fontSize: '12px' }}
             />
-            <YAxis 
+            <YAxis
               stroke="hsl(var(--muted-foreground))"
               style={{ fontSize: '12px' }}
             />
-            <Tooltip 
+            <Tooltip
               contentStyle={{
                 backgroundColor: 'hsl(var(--popover))',
                 border: '1px solid hsl(var(--border))',
@@ -62,19 +63,19 @@ export function ForecastChart({ title, description, data }: ForecastChartProps) 
               }}
             />
             <Legend />
-            <Line 
-              type="monotone" 
-              dataKey="value" 
-              stroke="hsl(var(--primary))" 
+            <Line
+              type="monotone"
+              dataKey="value"
+              stroke="hsl(var(--primary))"
               strokeWidth={2}
               name="Historical"
               dot={{ fill: 'hsl(var(--primary))' }}
             />
             {data.some(d => d.forecast) && (
-              <Line 
-                type="monotone" 
-                dataKey="forecast" 
-                stroke="hsl(var(--accent))" 
+              <Line
+                type="monotone"
+                dataKey="forecast"
+                stroke="hsl(var(--accent))"
                 strokeWidth={2}
                 strokeDasharray="5 5"
                 name="Forecast"
@@ -84,6 +85,6 @@ export function ForecastChart({ title, description, data }: ForecastChartProps) 
           </LineChart>
         </ResponsiveContainer>
       </CardContent>
-    </Card>
+    </MagicCard>
   );
 }

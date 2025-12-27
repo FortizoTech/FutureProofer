@@ -1,4 +1,5 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { MagicCard } from "@/components/magic-card";
+import { CardContent } from "@/components/ui/card";
 import { TrendingUp, TrendingDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LucideIcon } from "lucide-react";
@@ -14,7 +15,7 @@ interface MetricCardProps {
 
 export function MetricCard({ title, value, change, trend, icon: Icon, description }: MetricCardProps) {
   return (
-    <Card data-testid={`card-metric-${title.toLowerCase().replace(/\s+/g, '-')}`}>
+    <MagicCard className="h-full" data-testid={`card-metric-${title.toLowerCase().replace(/\s+/g, '-')}`}>
       <CardContent className="p-6">
         <div className="flex items-start justify-between mb-4">
           <p className="text-sm font-medium text-muted-foreground">{title}</p>
@@ -40,6 +41,6 @@ export function MetricCard({ title, value, change, trend, icon: Icon, descriptio
           )}
         </div>
       </CardContent>
-    </Card>
+    </MagicCard>
   );
 }

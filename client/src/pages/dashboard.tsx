@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useUser } from "@/context/user-context";
 import { useLocation } from "wouter";
 import { MOCK_INSIGHTS } from "@/lib/mock-db";
-import MagicBento from "@/components/MagicBento";
+import { MagicContainer, MagicCard } from "@/components/magic-card";
 
 export default function Dashboard() {
     const { user } = useUser();
@@ -27,7 +27,7 @@ export default function Dashboard() {
     const currentDate = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 
     return (
-        <div className="space-y-6 pb-10">
+        <MagicContainer className="space-y-6 pb-10">
             {/* Header Section */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
@@ -89,7 +89,7 @@ export default function Dashboard() {
 
                 {/* Right Column: Quick Actions */}
                 <div className="space-y-4 md:space-y-6">
-                    <div className="bg-card rounded-xl border shadow-sm p-4 md:p-6 h-full">
+                    <MagicCard className="h-full p-4 md:p-6">
                         <h3 className="font-serif text-lg font-semibold mb-4">Quick Actions</h3>
                         {/* Mobile: Icon Grid, Desktop: Vertical List with Labels */}
                         <div className="grid grid-cols-3 gap-2 md:flex md:flex-col md:gap-4">
@@ -136,7 +136,7 @@ export default function Dashboard() {
                                 <span className="text-[10px] md:hidden">Insights</span>
                             </Button>
                         </div>
-                    </div>
+                    </MagicCard>
                 </div>
             </div>
 
@@ -168,23 +168,6 @@ export default function Dashboard() {
                     ))}
                 </div>
             </div>
-
-            {/* Magic Bento Section */}
-            <div className="space-y-4 md:space-y-6">
-                <h2 className="font-serif text-lg md:text-xl font-semibold">System Overview</h2>
-                <MagicBento
-                    textAutoHide={true}
-                    enableStars={true}
-                    enableSpotlight={true}
-                    enableBorderGlow={true}
-                    enableTilt={true}
-                    enableMagnetism={true}
-                    clickEffect={true}
-                    spotlightRadius={300}
-                    particleCount={12}
-                    glowColor="132, 0, 255"
-                />
-            </div>
-        </div>
+        </MagicContainer>
     );
 }
